@@ -1,0 +1,21 @@
+[project]
+name = "argus-api"
+version = "1.0.0"
+description = "FastAPI backend for the ARGUS research lab"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.116.1",
+  "pydantic==2.11.7",
+  "uvicorn[standard]==0.35.0",
+]
+
+[project.optional-dependencies]
+dev = ["httpx==0.28.1", "pytest==8.4.1", "ruff==0.12.9"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"

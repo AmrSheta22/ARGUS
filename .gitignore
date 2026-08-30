@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+node_modules/
+.next/
+dist/
+.wrangler/
+.env
+.env.local
+coverage/
+backend/data/*.db-shm
+backend/data/*.db-wal
