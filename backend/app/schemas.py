@@ -58,6 +58,8 @@ class ContentItem(BaseModel):
     tags: str = ""
     published: bool = True
     sort_order: int = 0
+    created_at: str
+    updated_at: str
 
 
 class ContentCreate(BaseModel):
@@ -76,3 +78,8 @@ class ContactRequest(BaseModel):
     email: str = Field(min_length=5, max_length=200)
     subject: str = Field(min_length=2, max_length=180)
     message: str = Field(min_length=10, max_length=5000)
+
+
+class ContactMessage(ContactRequest):
+    id: int
+    created_at: str

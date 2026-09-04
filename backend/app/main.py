@@ -5,8 +5,26 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from .data import KNOWLEDGE, PAPERS, VIDEOS
-from .database import create_content, delete_content, initialize_database, list_content, save_message
-from .schemas import ContactRequest, ContentCreate, ContentItem, KnowledgeDomain, Paper, SummarizeRequest, SummarizeResponse, Video
+from .database import (
+    create_content,
+    delete_content,
+    initialize_database,
+    list_content,
+    list_messages,
+    save_message,
+    update_content,
+)
+from .schemas import (
+    ContactMessage,
+    ContactRequest,
+    ContentCreate,
+    ContentItem,
+    KnowledgeDomain,
+    Paper,
+    SummarizeRequest,
+    SummarizeResponse,
+    Video,
+)
 from .summarizer import extractive_summary
 
 app = FastAPI(
@@ -17,8 +35,18 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-origins = [origin.strip() for origin in os.getenv("ARGUS_CORS_ORIGINS", "http://localhost:3000").split(",") if origin.strip()]
-app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False, allow_methods=["GET", "POST", "DELETE"], allow_headers=["Content-Type", "Authorization"])
+origins = [
+    origin.strip()
+    for origin in os.getenv("ARGUS_CORS_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
+)
 initialize_database()
 
 
@@ -49,8 +77,17 @@ async def list_papers(area: str | None = Query(default=None)) -> list[Paper]:
 
 
 @app.get("/api/content", response_model=list[ContentItem], tags=["library"])
-async def content(section: str | None = Query(default=None)) -> list[dict]:
-    return list_content(section)
+async def content(
+    section: str | None = Query(default=None),
+    drafts: bool = Query(default=False),
+    authorization: str | None = Header(default=None),
+) -> list[dict]:
+    if drafts:
+        require_admin(authorization)
+    try:
+        return list_content(section, include_drafts=drafts)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
 
 
 @app.post("/api/admin/content", dependencies=[Depends(require_admin)], tags=["admin"])
@@ -61,10 +98,32 @@ async def add_content(payload: ContentCreate) -> dict[str, int]:
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 
+@app.patch("/api/admin/content/{content_id}", dependencies=[Depends(require_admin)], tags=["admin"])
+async def edit_content(content_id: int, payload: ContentCreate) -> dict[str, bool]:
+    try:
+        updated = update_content(content_id, payload)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    if not updated:
+        raise HTTPException(status_code=404, detail="Content item not found")
+    return {"updated": True}
+
+
 @app.delete("/api/admin/content/{content_id}", dependencies=[Depends(require_admin)], tags=["admin"])
 async def remove_content(content_id: int) -> dict[str, bool]:
-    delete_content(content_id)
+    if not delete_content(content_id):
+        raise HTTPException(status_code=404, detail="Content item not found")
     return {"deleted": True}
+
+
+@app.get(
+    "/api/admin/messages",
+    response_model=list[ContactMessage],
+    dependencies=[Depends(require_admin)],
+    tags=["admin"],
+)
+async def messages() -> list[dict]:
+    return list_messages()
 
 
 @app.post("/api/contact", tags=["contact"])

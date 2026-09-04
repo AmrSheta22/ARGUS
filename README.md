@@ -6,12 +6,12 @@ Public visitors have read-only access. The `/admin` console lets the authorized 
 
 ## Project structure
 
-- `frontend/` — React 19, Vinext, TypeScript, Tailwind CSS, server routes, D1 content storage, and the animated eye interface.
-- `backend/` — FastAPI, Pydantic, SQLite, the summarization endpoint, content endpoints, and automated tests.
+- `frontend/` — React 19, Vinext, TypeScript, Tailwind CSS, server routes, and the animated eye interface.
+- `backend/` — FastAPI, Pydantic, the single SQLite data store, content administration, summarization, and automated tests.
 - `assets/` — Original ARGUS visual assets.
 - `docker-compose.yml` — Local container configuration for both applications.
 
-The hosted frontend currently uses its own D1 database and server routes. The FastAPI service has a separate SQLite database, so they are independent data sources until the frontend is explicitly connected to FastAPI.
+FastAPI is the single source of truth. Frontend pages and server routes call FastAPI; only FastAPI reads or writes the SQLite database. Public visitors remain read-only, while frontend admin routes verify the ChatGPT account and attach a server-only API token.
 
 ## Quick start
 
@@ -56,7 +56,8 @@ Backend variables are documented in `backend/.env.example`:
 
 Frontend and email variables are documented in `frontend/.env.example`:
 
-- `NEXT_PUBLIC_API_URL`
+- `ARGUS_API_URL`
+- `ARGUS_ADMIN_TOKEN`
 - `NEXT_PUBLIC_SITE_URL`
 - `RESEND_API_KEY`
 - `CONTACT_FROM_EMAIL`
@@ -71,6 +72,7 @@ python -m pytest -q
 ```powershell
 cd frontend
 npm run lint
+npm run format:check
 npm run build
 ```
 

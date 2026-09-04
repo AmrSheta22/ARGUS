@@ -4,9 +4,17 @@ services:
     ports: ["8000:8000"]
     environment:
       ARGUS_CORS_ORIGINS: http://localhost:3000
+      ARGUS_DB_PATH: /app/data/argus.db
+      ARGUS_ADMIN_TOKEN: ${ARGUS_ADMIN_TOKEN:-local-development-token}
+    volumes:
+      - argus-data:/app/data
   frontend:
     build: ./frontend
     ports: ["3000:3000"]
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      ARGUS_API_URL: http://backend:8000
+      ARGUS_ADMIN_TOKEN: ${ARGUS_ADMIN_TOKEN:-local-development-token}
     depends_on: [backend]
+
+volumes:
+  argus-data:

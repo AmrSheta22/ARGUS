@@ -18,23 +18,71 @@ SEEDS = [
 
 def connect() -> sqlite3.Connection:
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    connection = sqlite3.connect(DATABASE_PATH)
+    connection = sqlite3.connect(DATABASE_PATH, timeout=10)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
     return connection
 
 
 def initialize_database() -> None:
     with closing(connect()) as connection:
-        connection.execute("""CREATE TABLE IF NOT EXISTS content (id INTEGER PRIMARY KEY AUTOINCREMENT, section TEXT NOT NULL CHECK(section IN ('videos','summaries','knowledge','work')), title TEXT NOT NULL, subtitle TEXT NOT NULL DEFAULT '', description TEXT NOT NULL, url TEXT NOT NULL DEFAULT '', tags TEXT NOT NULL DEFAULT '', published INTEGER NOT NULL DEFAULT 1, sort_order INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)""")
-        connection.execute("""CREATE TABLE IF NOT EXISTS contact_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, subject TEXT NOT NULL, message TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)""")
-        connection.execute("CREATE INDEX IF NOT EXISTS idx_content_section_published ON content(section, published, sort_order)")
-        connection.execute("CREATE INDEX IF NOT EXISTS idx_messages_created_at ON contact_messages(created_at)")
-        connection.executemany("INSERT OR IGNORE INTO content (id, section, title, subtitle, description, url, tags, published, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", SEEDS)
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS content (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                section TEXT NOT NULL CHECK(section IN ('videos', 'summaries', 'knowledge', 'work')),
+                title TEXT NOT NULL,
+                subtitle TEXT NOT NULL DEFAULT '',
+                description TEXT NOT NULL,
+                url TEXT NOT NULL DEFAULT '',
+                tags TEXT NOT NULL DEFAULT '',
+                published INTEGER NOT NULL DEFAULT 1,
+                sort_order INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS contact_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                subject TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_content_section_published
+            ON content(section, published, sort_order)
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_messages_created_at
+            ON contact_messages(created_at)
+            """
+        )
+        connection.executemany(
+            """
+            INSERT OR IGNORE INTO content (
+                id, section, title, subtitle, description, url, tags, published, sort_order
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            SEEDS,
+        )
         connection.execute("PRAGMA optimize")
         connection.commit()
 
 
 def list_content(section: str | None = None, include_drafts: bool = False) -> list[dict]:
+    if section and section not in SECTIONS:
+        raise ValueError("Invalid section")
+
     clauses, params = [], []
     if section:
         clauses.append("section = ?")
@@ -43,7 +91,17 @@ def list_content(section: str | None = None, include_drafts: bool = False) -> li
         clauses.append("published = 1")
     where = f" WHERE {' AND '.join(clauses)}" if clauses else ""
     with closing(connect()) as connection:
-        rows = connection.execute(f"SELECT id, section, title, subtitle, description, url, tags, published, sort_order FROM content{where} ORDER BY sort_order DESC, id DESC", params).fetchall()
+        rows = connection.execute(
+            f"""
+            SELECT
+                id, section, title, subtitle, description, url, tags,
+                published, sort_order, created_at, updated_at
+            FROM content
+            {where}
+            ORDER BY sort_order DESC, id DESC
+            """,
+            params,
+        ).fetchall()
     return [{**dict(row), "published": bool(row["published"])} for row in rows]
 
 
@@ -51,18 +109,81 @@ def create_content(payload: ContentCreate) -> int:
     if payload.section not in SECTIONS:
         raise ValueError("Invalid section")
     with closing(connect()) as connection:
-        cursor = connection.execute("INSERT INTO content (section, title, subtitle, description, url, tags, published, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (payload.section, payload.title, payload.subtitle, payload.description, payload.url, payload.tags, int(payload.published), payload.sort_order))
+        cursor = connection.execute(
+            """
+            INSERT INTO content (
+                section, title, subtitle, description, url, tags, published, sort_order
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                payload.section,
+                payload.title,
+                payload.subtitle,
+                payload.description,
+                payload.url,
+                payload.tags,
+                int(payload.published),
+                payload.sort_order,
+            ),
+        )
         connection.commit()
         return int(cursor.lastrowid)
 
 
-def delete_content(content_id: int) -> None:
+def update_content(content_id: int, payload: ContentCreate) -> bool:
+    if payload.section not in SECTIONS:
+        raise ValueError("Invalid section")
+
     with closing(connect()) as connection:
-        connection.execute("DELETE FROM content WHERE id = ?", (content_id,))
+        cursor = connection.execute(
+            """
+            UPDATE content
+            SET section = ?, title = ?, subtitle = ?, description = ?, url = ?,
+                tags = ?, published = ?, sort_order = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+            """,
+            (
+                payload.section,
+                payload.title,
+                payload.subtitle,
+                payload.description,
+                payload.url,
+                payload.tags,
+                int(payload.published),
+                payload.sort_order,
+                content_id,
+            ),
+        )
         connection.commit()
+        return cursor.rowcount > 0
+
+
+def delete_content(content_id: int) -> bool:
+    with closing(connect()) as connection:
+        cursor = connection.execute("DELETE FROM content WHERE id = ?", (content_id,))
+        connection.commit()
+        return cursor.rowcount > 0
 
 
 def save_message(name: str, email: str, subject: str, message: str) -> None:
     with closing(connect()) as connection:
-        connection.execute("INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)", (name, email, subject, message))
+        connection.execute(
+            """
+            INSERT INTO contact_messages (name, email, subject, message)
+            VALUES (?, ?, ?, ?)
+            """,
+            (name, email, subject, message),
+        )
         connection.commit()
+
+
+def list_messages() -> list[dict]:
+    with closing(connect()) as connection:
+        rows = connection.execute(
+            """
+            SELECT id, name, email, subject, message, created_at
+            FROM contact_messages
+            ORDER BY created_at DESC, id DESC
+            """
+        ).fetchall()
+    return [dict(row) for row in rows]
