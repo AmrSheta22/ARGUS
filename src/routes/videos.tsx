@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Button } from "#/components/ui/button.tsx";
-import { SectionLabel } from "#/features/content/components/shared.tsx";
+import {
+  ContentEmptyState,
+  ContentErrorState,
+  ContentPage,
+  SectionLabel,
+} from "#/features/content/components/shared.tsx";
 import { FeaturedVideo, VideoCard, VideoSkeletons } from "#/features/content/components/videos.tsx";
 import { videoQueryOptions } from "#/features/content/queries.ts";
 
@@ -15,27 +19,16 @@ function VideosPage() {
   const { data, isPending, isError, refetch } = useQuery(videoQueryOptions());
 
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col bg-background px-6 py-10">
-      <section className="flex flex-col gap-4">
-        <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">Videos</h1>
-        <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Curated talks, tutorials, and recordings by the ARGUS NLP Group.
-        </p>
-      </section>
-
+    <ContentPage
+      title="Videos"
+      description="Curated talks, tutorials, and recordings by the ARGUS NLP Group."
+    >
       {isPending ? (
         <VideoSkeletons />
       ) : isError || !data ? (
-        <div className="mt-12 flex flex-col items-center gap-3 rounded-none border border-dashed p-10 text-center">
-          <p className="text-sm text-muted-foreground">Failed to load videos.</p>
-          <Button variant="outline" size="sm" onClick={() => void refetch()}>
-            Retry
-          </Button>
-        </div>
+        <ContentErrorState message="Failed to load videos." onRetry={refetch} />
       ) : data.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center gap-2 rounded-none border border-dashed p-10 text-center">
-          <p className="text-sm text-muted-foreground">No videos yet.</p>
-        </div>
+        <ContentEmptyState message="No videos yet." />
       ) : (
         <div className="mt-10 flex flex-col gap-10">
           <FeaturedVideo item={data[0]} />
@@ -52,6 +45,6 @@ function VideosPage() {
           ) : null}
         </div>
       )}
-    </div>
+    </ContentPage>
   );
 }
