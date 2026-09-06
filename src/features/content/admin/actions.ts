@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { adminMiddleware } from "#/lib/auth/middleware.ts";
 
+import { createKnowledge, deleteKnowledge, updateKnowledge } from "../knowledge.server.ts";
 import {
+  knowledgeDeleteSchema,
+  knowledgeInputSchema,
+  knowledgeUpdateSchema,
   summaryDeleteSchema,
   summaryInputSchema,
   summaryUpdateSchema,
@@ -78,4 +82,25 @@ export const $deleteSummary = createServerFn({ method: "POST" })
   .validator(summaryDeleteSchema)
   .handler(async ({ data }) => {
     return deleteSummary(data.id);
+  });
+
+export const $createKnowledge = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(knowledgeInputSchema)
+  .handler(async ({ data }) => {
+    return createKnowledge(data);
+  });
+
+export const $updateKnowledge = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(knowledgeUpdateSchema)
+  .handler(async ({ data }) => {
+    return updateKnowledge(data.id, data.data);
+  });
+
+export const $deleteKnowledge = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(knowledgeDeleteSchema)
+  .handler(async ({ data }) => {
+    return deleteKnowledge(data.id);
   });

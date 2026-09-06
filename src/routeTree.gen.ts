@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as GuestRouteRouteImport } from './routes/_guest/route'
+import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as SummariesRouteImport } from './routes/summaries'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as WorkRouteImport } from './routes/work'
@@ -36,6 +37,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const GuestRouteRoute = GuestRouteRouteImport.update({
   id: '/_guest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeRoute = KnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SummariesRoute = SummariesRouteImport.update({
@@ -101,6 +107,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/knowledge': typeof KnowledgeRoute
   '/summaries': typeof SummariesRoute
   '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/knowledge': typeof KnowledgeRoute
   '/summaries': typeof SummariesRoute
   '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_guest': typeof GuestRouteRouteWithChildren
+  '/knowledge': typeof KnowledgeRoute
   '/summaries': typeof SummariesRoute
   '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_guest'
+    | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   GuestRouteRoute: typeof GuestRouteRouteWithChildren
+  KnowledgeRoute: typeof KnowledgeRoute
   SummariesRoute: typeof SummariesRoute
   VideosRoute: typeof VideosRoute
   WorkRoute: typeof WorkRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof GuestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge': {
+      id: '/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof KnowledgeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/summaries': {
@@ -365,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   GuestRouteRoute: GuestRouteRouteWithChildren,
+  KnowledgeRoute: KnowledgeRoute,
   SummariesRoute: SummariesRoute,
   VideosRoute: VideosRoute,
   WorkRoute: WorkRoute,

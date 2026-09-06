@@ -1,5 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { BriefcaseIcon, FileTextIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  BriefcaseIcon,
+  FileTextIcon,
+  LayoutDashboardIcon,
+  VideoIcon,
+} from "lucide-react";
 import * as React from "react";
 
 import {
@@ -38,6 +44,11 @@ const navItems = [
     label: "Summaries",
     icon: FileTextIcon,
     to: "/admin/summaries",
+  },
+  {
+    label: "Knowledge",
+    icon: BookOpenIcon,
+    to: "/admin/knowledge",
   },
 ] as const;
 

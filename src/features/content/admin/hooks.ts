@@ -1,8 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { summaryQueryKeys, videoQueryKeys, workQueryKeys } from "../queries.ts";
-import type { Summary, SummaryInput, Video, VideoInput, Work, WorkInput } from "../schemas.ts";
+import { knowledgeQueryKeys, summaryQueryKeys, videoQueryKeys, workQueryKeys } from "../queries.ts";
+import type {
+  Knowledge,
+  KnowledgeInput,
+  Summary,
+  SummaryInput,
+  Video,
+  VideoInput,
+  Work,
+  WorkInput,
+} from "../schemas.ts";
 import {
+  $createKnowledge,
+  $deleteKnowledge,
+  $updateKnowledge,
   $createSummary,
   $deleteSummary,
   $updateSummary,
@@ -112,6 +124,40 @@ export function useDeleteSummary() {
     mutationFn: async (summary: Summary) => $deleteSummary({ data: { id: summary.id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: summaryQueryKeys.all });
+    },
+  });
+}
+
+export function useCreateKnowledge() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: KnowledgeInput) => $createKnowledge({ data: input }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: knowledgeQueryKeys.all });
+    },
+  });
+}
+
+export function useUpdateKnowledge() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: KnowledgeInput }) =>
+      $updateKnowledge({ data: { id, data } }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: knowledgeQueryKeys.all });
+    },
+  });
+}
+
+export function useDeleteKnowledge() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (knowledge: Knowledge) => $deleteKnowledge({ data: { id: knowledge.id } }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: knowledgeQueryKeys.all });
     },
   });
 }

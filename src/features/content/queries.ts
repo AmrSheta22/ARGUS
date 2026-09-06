@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { $listSummaries, $listVideos, $listWork } from "./actions.ts";
+import { $listKnowledge, $listSummaries, $listVideos, $listWork } from "./actions.ts";
 
 export const workQueryKeys = {
   all: ["content", "work"] as const,
@@ -33,4 +33,15 @@ export const summaryQueryOptions = () =>
   queryOptions({
     queryKey: summaryQueryKeys.list(),
     queryFn: ({ signal }) => $listSummaries({ signal }),
+  });
+
+export const knowledgeQueryKeys = {
+  all: ["content", "knowledge"] as const,
+  list: () => [...knowledgeQueryKeys.all, "list"] as const,
+};
+
+export const knowledgeQueryOptions = () =>
+  queryOptions({
+    queryKey: knowledgeQueryKeys.list(),
+    queryFn: ({ signal }) => $listKnowledge({ signal }),
   });
