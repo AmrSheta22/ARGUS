@@ -5,8 +5,8 @@ import { useState } from "react";
 
 import { Button } from "#/components/ui/button.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
-import { WorkDialog } from "#/features/content/admin/components/work/create-dialog.tsx";
 import { WorkTable } from "#/features/content/admin/components/work/table.tsx";
+import { WorkDialog } from "#/features/content/admin/components/work/work-dialog.tsx";
 import { workQueryOptions } from "#/features/content/queries.ts";
 import type { Work } from "#/features/content/schemas.ts";
 
