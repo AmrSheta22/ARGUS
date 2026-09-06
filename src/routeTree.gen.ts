@@ -12,10 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as GuestRouteRouteImport } from './routes/_guest/route'
+import { Route as WorkRouteImport } from './routes/work'
 import { Route as AuthAdminRouteRouteImport } from './routes/_auth/admin/route'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
 import { Route as GuestSignupRouteImport } from './routes/_guest/signup'
 import { Route as AuthAdminIndexRouteImport } from './routes/_auth/admin/index'
+import { Route as AuthAdminKnowledgeRouteImport } from './routes/_auth/admin/knowledge'
+import { Route as AuthAdminSummariesRouteImport } from './routes/_auth/admin/summaries'
+import { Route as AuthAdminVideosRouteImport } from './routes/_auth/admin/videos'
+import { Route as AuthAdminWorkRouteImport } from './routes/_auth/admin/work'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +34,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const GuestRouteRoute = GuestRouteRouteImport.update({
   id: '/_guest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAdminRouteRoute = AuthAdminRouteRouteImport.update({
@@ -51,6 +61,26 @@ const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthAdminRouteRoute,
 } as any)
+const AuthAdminKnowledgeRoute = AuthAdminKnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
+  getParentRoute: () => AuthAdminRouteRoute,
+} as any)
+const AuthAdminSummariesRoute = AuthAdminSummariesRouteImport.update({
+  id: '/summaries',
+  path: '/summaries',
+  getParentRoute: () => AuthAdminRouteRoute,
+} as any)
+const AuthAdminVideosRoute = AuthAdminVideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => AuthAdminRouteRoute,
+} as any)
+const AuthAdminWorkRoute = AuthAdminWorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => AuthAdminRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -59,16 +89,26 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/work': typeof WorkRoute
   '/admin': typeof AuthAdminRouteRouteWithChildren
   '/login': typeof GuestLoginRoute
   '/signup': typeof GuestSignupRoute
+  '/admin/knowledge': typeof AuthAdminKnowledgeRoute
+  '/admin/summaries': typeof AuthAdminSummariesRoute
+  '/admin/videos': typeof AuthAdminVideosRoute
+  '/admin/work': typeof AuthAdminWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof AuthAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/work': typeof WorkRoute
   '/login': typeof GuestLoginRoute
   '/signup': typeof GuestSignupRoute
+  '/admin/knowledge': typeof AuthAdminKnowledgeRoute
+  '/admin/summaries': typeof AuthAdminSummariesRoute
+  '/admin/videos': typeof AuthAdminVideosRoute
+  '/admin/work': typeof AuthAdminWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin': typeof AuthAdminIndexRoute
 }
@@ -77,25 +117,56 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_guest': typeof GuestRouteRouteWithChildren
+  '/work': typeof WorkRoute
   '/_auth/admin': typeof AuthAdminRouteRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
   '/_guest/signup': typeof GuestSignupRoute
+  '/_auth/admin/knowledge': typeof AuthAdminKnowledgeRoute
+  '/_auth/admin/summaries': typeof AuthAdminSummariesRoute
+  '/_auth/admin/videos': typeof AuthAdminVideosRoute
+  '/_auth/admin/work': typeof AuthAdminWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/admin/': typeof AuthAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login' | '/signup' | '/api/auth/$' | '/admin/'
+  fullPaths:
+    | '/'
+    | '/work'
+    | '/admin'
+    | '/login'
+    | '/signup'
+    | '/admin/knowledge'
+    | '/admin/summaries'
+    | '/admin/videos'
+    | '/admin/work'
+    | '/api/auth/$'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup' | '/api/auth/$' | '/admin'
+  to:
+    | '/'
+    | '/work'
+    | '/login'
+    | '/signup'
+    | '/admin/knowledge'
+    | '/admin/summaries'
+    | '/admin/videos'
+    | '/admin/work'
+    | '/api/auth/$'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_guest'
+    | '/work'
     | '/_auth/admin'
     | '/_guest/login'
     | '/_guest/signup'
+    | '/_auth/admin/knowledge'
+    | '/_auth/admin/summaries'
+    | '/_auth/admin/videos'
+    | '/_auth/admin/work'
     | '/api/auth/$'
     | '/_auth/admin/'
   fileRoutesById: FileRoutesById
@@ -104,6 +175,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   GuestRouteRoute: typeof GuestRouteRouteWithChildren
+  WorkRoute: typeof WorkRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -128,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof GuestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/admin': {
@@ -158,6 +237,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminIndexRouteImport
       parentRoute: typeof AuthAdminRouteRoute
     }
+    '/_auth/admin/knowledge': {
+      id: '/_auth/admin/knowledge'
+      path: '/knowledge'
+      fullPath: '/admin/knowledge'
+      preLoaderRoute: typeof AuthAdminKnowledgeRouteImport
+      parentRoute: typeof AuthAdminRouteRoute
+    }
+    '/_auth/admin/summaries': {
+      id: '/_auth/admin/summaries'
+      path: '/summaries'
+      fullPath: '/admin/summaries'
+      preLoaderRoute: typeof AuthAdminSummariesRouteImport
+      parentRoute: typeof AuthAdminRouteRoute
+    }
+    '/_auth/admin/videos': {
+      id: '/_auth/admin/videos'
+      path: '/videos'
+      fullPath: '/admin/videos'
+      preLoaderRoute: typeof AuthAdminVideosRouteImport
+      parentRoute: typeof AuthAdminRouteRoute
+    }
+    '/_auth/admin/work': {
+      id: '/_auth/admin/work'
+      path: '/work'
+      fullPath: '/admin/work'
+      preLoaderRoute: typeof AuthAdminWorkRouteImport
+      parentRoute: typeof AuthAdminRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -169,10 +276,18 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthAdminRouteRouteChildren {
+  AuthAdminKnowledgeRoute: typeof AuthAdminKnowledgeRoute
+  AuthAdminSummariesRoute: typeof AuthAdminSummariesRoute
+  AuthAdminVideosRoute: typeof AuthAdminVideosRoute
+  AuthAdminWorkRoute: typeof AuthAdminWorkRoute
   AuthAdminIndexRoute: typeof AuthAdminIndexRoute
 }
 
 const AuthAdminRouteRouteChildren: AuthAdminRouteRouteChildren = {
+  AuthAdminKnowledgeRoute: AuthAdminKnowledgeRoute,
+  AuthAdminSummariesRoute: AuthAdminSummariesRoute,
+  AuthAdminVideosRoute: AuthAdminVideosRoute,
+  AuthAdminWorkRoute: AuthAdminWorkRoute,
   AuthAdminIndexRoute: AuthAdminIndexRoute,
 }
 
@@ -210,6 +325,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   GuestRouteRoute: GuestRouteRouteWithChildren,
+  WorkRoute: WorkRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

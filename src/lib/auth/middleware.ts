@@ -46,3 +46,30 @@ export const freshAuthMiddleware = createMiddleware().server(async ({ next }) =>
 
   return next({ context: { session } });
 });
+
+/**
+ * Middleware to force an admin role on server requests (including server functions),
+ * and add the session to the context.
+ *
+ * A fresh session is always fetched to prevent a user from acting after their
+ * session/role has changed. The user role is derived from the Better Auth admin plugin.
+ */
+export const adminMiddleware = createMiddleware().server(async ({ next }) => {
+  const session = await _getSession({
+    // ensure session is fresh
+    // https://better-auth.com/docs/concepts/session-management#cookie-cache
+    disableCookieCache: true,
+  });
+
+  if (!session) {
+    setResponseStatus(401);
+    throw new Error("Unauthorized");
+  }
+
+  if (session.user.role !== "admin") {
+    setResponseStatus(403);
+    throw new Error("Forbidden");
+  }
+
+  return next({ context: { session } });
+});
