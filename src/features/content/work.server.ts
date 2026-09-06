@@ -27,7 +27,6 @@ function toWork(row: WorkRow): Work {
 
 function toValues(input: WorkInput) {
   return {
-    code: input.code,
     year: input.year,
     title: input.title,
     area: input.area,

@@ -34,7 +34,6 @@ import { workInputSchema, type Work, type WorkInput } from "../../../schemas.ts"
 import { useCreateWork, useUpdateWork } from "../../hooks.ts";
 
 type WorkFormValues = {
-  code: string;
   year: string;
   title: string;
   area: string;
@@ -49,7 +48,6 @@ type FieldErrors = Partial<Record<keyof WorkInput, string>>;
 
 function toFormValues(work: Work | null): WorkFormValues {
   return {
-    code: work?.code ?? "",
     year: work?.year ? String(work.year) : String(new Date().getFullYear()),
     title: work?.title ?? "",
     area: work?.area ?? "",
@@ -95,34 +93,20 @@ function WorkFormFields({
 }) {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <Field>
-          <FieldLabel htmlFor="work-code">Code</FieldLabel>
-          <Input
-            id="work-code"
-            placeholder="ARG-006"
-            value={values.code}
-            disabled={disabled}
-            aria-invalid={!!errors.code}
-            onChange={(e) => onChange({ code: e.target.value })}
-          />
-          {errors.code ? <FieldError>{errors.code}</FieldError> : null}
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="work-year">Year</FieldLabel>
-          <Input
-            id="work-year"
-            type="number"
-            min={1000}
-            max={2100}
-            value={values.year}
-            disabled={disabled}
-            aria-invalid={!!errors.year}
-            onChange={(e) => onChange({ year: e.target.value })}
-          />
-          {errors.year ? <FieldError>{errors.year}</FieldError> : null}
-        </Field>
-      </div>
+      <Field>
+        <FieldLabel htmlFor="work-year">Year</FieldLabel>
+        <Input
+          id="work-year"
+          type="number"
+          min={1000}
+          max={2100}
+          value={values.year}
+          disabled={disabled}
+          aria-invalid={!!errors.year}
+          onChange={(e) => onChange({ year: e.target.value })}
+        />
+        {errors.year ? <FieldError>{errors.year}</FieldError> : null}
+      </Field>
       <Field>
         <FieldLabel htmlFor="work-title">Title</FieldLabel>
         <Input
