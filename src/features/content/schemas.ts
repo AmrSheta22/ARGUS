@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { WORK_CONTENT_STATUSES } from "#/consts/content.ts";
 import type { Dto } from "#/lib/db/dto.ts";
-import type { work } from "#/lib/db/schema/index.ts";
+import type { videos, work } from "#/lib/db/schema/index.ts";
 
 export const workInputSchema = z.object({
   year: z.number().int().min(1000).max(2100),
@@ -32,3 +32,32 @@ export const workDeleteSchema = z.object({
 });
 
 export type Work = Dto<typeof work.$inferSelect>;
+
+export const videoInputSchema = z.object({
+  title: z.string().trim().min(1, "Title is required.").max(300),
+  source: z.string().trim().max(200),
+  topic: z.string().trim().max(200),
+  durationMinutes: z.number().int().min(0),
+  url: z
+    .string()
+    .trim()
+    .min(1, "Video URL is required.")
+    .max(1000)
+    .refine((value) => z.url().safeParse(value).success, {
+      message: "Enter a valid URL.",
+    }),
+  description: z.string().trim().min(1, "Description is required."),
+});
+
+export type VideoInput = z.infer<typeof videoInputSchema>;
+
+export const videoUpdateSchema = z.object({
+  id: z.number().int(),
+  data: videoInputSchema,
+});
+
+export const videoDeleteSchema = z.object({
+  id: z.number().int(),
+});
+
+export type Video = Dto<typeof videos.$inferSelect>;

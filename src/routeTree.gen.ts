@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as GuestRouteRouteImport } from './routes/_guest/route'
+import { Route as VideosRouteImport } from './routes/videos'
 import { Route as WorkRouteImport } from './routes/work'
 import { Route as AuthAdminRouteRouteImport } from './routes/_auth/admin/route'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
@@ -34,6 +35,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const GuestRouteRoute = GuestRouteRouteImport.update({
   id: '/_guest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideosRoute = VideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkRoute = WorkRouteImport.update({
@@ -89,6 +95,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
   '/admin': typeof AuthAdminRouteRouteWithChildren
   '/login': typeof GuestLoginRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
   '/login': typeof GuestLoginRoute
   '/signup': typeof GuestSignupRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_guest': typeof GuestRouteRouteWithChildren
+  '/videos': typeof VideosRoute
   '/work': typeof WorkRoute
   '/_auth/admin': typeof AuthAdminRouteRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/videos'
     | '/work'
     | '/admin'
     | '/login'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/videos'
     | '/work'
     | '/login'
     | '/signup'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_guest'
+    | '/videos'
     | '/work'
     | '/_auth/admin'
     | '/_guest/login'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   GuestRouteRoute: typeof GuestRouteRouteWithChildren
+  VideosRoute: typeof VideosRoute
   WorkRoute: typeof WorkRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof GuestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/videos': {
+      id: '/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof VideosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/work': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   GuestRouteRoute: GuestRouteRouteWithChildren,
+  VideosRoute: VideosRoute,
   WorkRoute: WorkRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
