@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-import { WORK_CONTENT_STATUSES, type WorkStatus } from "#/consts/content.ts";
+import { WORK_CONTENT_STATUSES } from "#/consts/content.ts";
+import type { Dto } from "#/lib/db/dto.ts";
+import type { work } from "#/lib/db/schema/index.ts";
 
 export const workInputSchema = z.object({
   year: z.number().int().min(1000).max(2100),
@@ -15,9 +17,7 @@ export const workInputSchema = z.object({
     .max(1000)
     .refine((value) => value === "" || z.url().safeParse(value).success, {
       message: "Enter a valid URL or leave empty.",
-    })
-    .default(""),
-  sortOrder: z.number().int().default(0),
+    }),
 });
 
 export type WorkInput = z.infer<typeof workInputSchema>;
@@ -31,17 +31,4 @@ export const workDeleteSchema = z.object({
   id: z.number().int(),
 });
 
-export type Work = {
-  id: number;
-  code: string;
-  year: number;
-  title: string;
-  area: string;
-  status: WorkStatus;
-  authors: string[];
-  abstract: string;
-  url: string | null;
-  sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
-};
+export type Work = Dto<typeof work.$inferSelect>;

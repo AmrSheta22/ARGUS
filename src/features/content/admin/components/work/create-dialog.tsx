@@ -1,6 +1,6 @@
+import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { LoaderCircleIcon } from "lucide-react";
-import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { Button } from "#/components/ui/button.tsx";
 import {
@@ -33,174 +33,273 @@ import { WORK_CONTENT_STATUS_OPTIONS, type WorkStatus } from "#/consts/content.t
 import { workInputSchema, type Work, type WorkInput } from "../../../schemas.ts";
 import { useCreateWork, useUpdateWork } from "../../hooks.ts";
 
-type WorkFormValues = {
-  title: string;
-  year: string;
-  area: string;
-  status: WorkStatus;
-  authors: string[];
-  abstract: string;
-  url: string;
-  sortOrder: string;
-};
+function fieldIsInvalid(field: AnyFieldApi) {
+  return (
+    !field.state.meta.isValid &&
+    (field.state.meta.isTouched || (field.state.meta.errorMap.onSubmit?.length ?? 0) > 0)
+  );
+}
 
-type FieldErrors = Partial<Record<keyof WorkInput, string>>;
+function WorkField({
+  field,
+  label,
+  htmlFor,
+  children,
+}: {
+  field: AnyFieldApi;
+  label: string;
+  htmlFor?: string;
+  children: (isInvalid: boolean) => ReactNode;
+}) {
+  const isInvalid = fieldIsInvalid(field);
 
-function toFormValues(work: Work | null): WorkFormValues {
+  return (
+    <Field data-invalid={isInvalid}>
+      <FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
+      {children(isInvalid)}
+      {isInvalid ? <FieldError errors={field.state.meta.errors} /> : null}
+    </Field>
+  );
+}
+
+function toFormValues(work: Work | null): WorkInput {
   return {
     title: work?.title ?? "",
-    year: work?.year ? String(work.year) : String(new Date().getFullYear()),
+    year: work?.year ?? new Date().getFullYear(),
     area: work?.area ?? "",
     status: work?.status ?? "under-review",
     authors: work?.authors ?? [],
     abstract: work?.abstract ?? "",
     url: work?.url ?? "",
-    sortOrder: work?.sortOrder ? String(work.sortOrder) : "0",
   };
 }
 
-function parseValues(values: WorkFormValues) {
-  const parsed = workInputSchema.safeParse({
-    ...values,
-    year: values.year === "" ? Number.NaN : Number(values.year),
-    sortOrder: values.sortOrder === "" ? 0 : Number(values.sortOrder),
+function WorkFormDialog({ work, onClose }: { work: Work | null; onClose: () => void }) {
+  const isEditing = !!work;
+  const createWork = useCreateWork();
+  const updateWork = useUpdateWork();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const form = useForm({
+    defaultValues: toFormValues(work),
+    validators: {
+      onChange: workInputSchema,
+      onSubmit: workInputSchema,
+    },
+    onSubmit: async ({ value }) => {
+      setSubmitError(null);
+      try {
+        if (work) {
+          await updateWork.mutateAsync({ id: work.id, data: value });
+        } else {
+          await createWork.mutateAsync(value);
+        }
+        toast.add({
+          title: work ? "Work updated" : "Work created",
+          description: value.title,
+          type: "success",
+        });
+        onClose();
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error ? error.message : "An error occurred. Please try again.",
+        );
+      }
+    },
   });
 
-  if (!parsed.success) {
-    const errors: FieldErrors = {};
-    for (const issue of parsed.error.issues) {
-      const key = issue.path[0] as keyof WorkInput;
-      if (key && !errors[key]) {
-        errors[key] = issue.message;
-      }
-    }
-    return { errors };
-  }
-
-  return { data: parsed.data };
-}
-
-function WorkFormFields({
-  errors,
-  values,
-  onChange,
-  disabled,
-}: {
-  errors: FieldErrors;
-  values: WorkFormValues;
-  onChange: (updates: Partial<WorkFormValues>) => void;
-  disabled?: boolean;
-}) {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
-        <Field>
-          <FieldLabel htmlFor="work-title">Title</FieldLabel>
-          <Input
-            id="work-title"
-            placeholder="Robust Arabic misinformation detection under domain shift"
-            value={values.title}
-            disabled={disabled}
-            aria-invalid={!!errors.title}
-            onChange={(e) => onChange({ title: e.target.value })}
-          />
-          {errors.title ? <FieldError>{errors.title}</FieldError> : null}
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="work-year">Year</FieldLabel>
-          <Input
-            id="work-year"
-            type="number"
-            min={1000}
-            max={2100}
-            value={values.year}
-            disabled={disabled}
-            aria-invalid={!!errors.year}
-            onChange={(e) => onChange({ year: e.target.value })}
-          />
-          {errors.year ? <FieldError>{errors.year}</FieldError> : null}
-        </Field>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <Field>
-          <FieldLabel htmlFor="work-area">Area</FieldLabel>
-          <Input
-            id="work-area"
-            placeholder="Natural Language Processing"
-            value={values.area}
-            disabled={disabled}
-            aria-invalid={!!errors.area}
-            onChange={(e) => onChange({ area: e.target.value })}
-          />
-          {errors.area ? <FieldError>{errors.area}</FieldError> : null}
-        </Field>
-        <Field>
-          <FieldLabel>Status</FieldLabel>
-          <Select
-            value={values.status}
-            onValueChange={(status) => onChange({ status: status ?? "under-review" })}
-            items={WORK_CONTENT_STATUS_OPTIONS}
-            disabled={disabled}
-          >
-            <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              {WORK_CONTENT_STATUS_OPTIONS.map(({ value, label }) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {errors.status ? <FieldError>{errors.status}</FieldError> : null}
-        </Field>
-      </div>
-      <Field>
-        <FieldLabel>Authors</FieldLabel>
-        <TagsInput
-          value={values.authors}
-          onValueChange={(authors) => onChange({ authors })}
-          disabled={disabled}
-          aria-invalid={!!errors.authors}
-        >
-          <TagsInputList>
-            {values.authors.map((author) => (
-              <TagsInputItem key={author} value={author}>
-                {author}
-              </TagsInputItem>
-            ))}
-            <TagsInputInput placeholder="Add author and press Enter" />
-          </TagsInputList>
-        </TagsInput>
-        {errors.authors ? <FieldError>{errors.authors}</FieldError> : null}
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="work-abstract">Abstract</FieldLabel>
-        <Textarea
-          id="work-abstract"
-          rows={4}
-          placeholder="Summarize the research work..."
-          value={values.abstract}
-          disabled={disabled}
-          aria-invalid={!!errors.abstract}
-          onChange={(e) => onChange({ abstract: e.target.value })}
-        />
-        {errors.abstract ? <FieldError>{errors.abstract}</FieldError> : null}
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="work-url">URL</FieldLabel>
-        <Input
-          id="work-url"
-          type="url"
-          placeholder="https://arxiv.org/abs/..."
-          value={values.url}
-          disabled={disabled}
-          aria-invalid={!!errors.url}
-          onChange={(e) => onChange({ url: e.target.value })}
-        />
-        {errors.url ? <FieldError>{errors.url}</FieldError> : null}
-      </Field>
+      <DialogHeader>
+        <DialogTitle>{isEditing ? "Edit work" : "New work"}</DialogTitle>
+        <DialogDescription>
+          {isEditing
+            ? "Update the details of this research work."
+            : "Add a new research work to the Our Work page."}
+        </DialogDescription>
+      </DialogHeader>
+      <form
+        noValidate
+        className="flex flex-col gap-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          void form.handleSubmit();
+        }}
+      >
+        {submitError ? <FieldError>{submitError}</FieldError> : null}
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <form.Field name="title">
+                  {(field) => (
+                    <WorkField field={field} label="Title" htmlFor={field.name}>
+                      {(isInvalid) => (
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="Robust Arabic misinformation detection under domain shift"
+                          value={field.state.value}
+                          disabled={isSubmitting}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                        />
+                      )}
+                    </WorkField>
+                  )}
+                </form.Field>
+                <form.Field name="year">
+                  {(field) => (
+                    <WorkField field={field} label="Year" htmlFor={field.name}>
+                      {(isInvalid) => (
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          type="number"
+                          min={1000}
+                          max={2100}
+                          inputMode="numeric"
+                          value={Number.isNaN(field.state.value) ? "" : field.state.value}
+                          disabled={isSubmitting}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.valueAsNumber)}
+                          aria-invalid={isInvalid}
+                        />
+                      )}
+                    </WorkField>
+                  )}
+                </form.Field>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <form.Field name="area">
+                  {(field) => (
+                    <WorkField field={field} label="Area" htmlFor={field.name}>
+                      {(isInvalid) => (
+                        <Input
+                          id={field.name}
+                          name={field.name}
+                          placeholder="Natural Language Processing"
+                          value={field.state.value}
+                          disabled={isSubmitting}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                        />
+                      )}
+                    </WorkField>
+                  )}
+                </form.Field>
+                <form.Field name="status">
+                  {(field) => (
+                    <WorkField field={field} label="Status">
+                      {(isInvalid) => (
+                        <Select
+                          name={field.name}
+                          value={field.state.value}
+                          onValueChange={(value) =>
+                            field.handleChange((value ?? "under-review") as WorkStatus)
+                          }
+                          items={WORK_CONTENT_STATUS_OPTIONS}
+                          disabled={isSubmitting}
+                        >
+                          <SelectTrigger className="w-full" aria-invalid={isInvalid}>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {WORK_CONTENT_STATUS_OPTIONS.map(({ value, label }) => (
+                              <SelectItem key={value} value={value}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </WorkField>
+                  )}
+                </form.Field>
+              </div>
+              <form.Field name="authors">
+                {(field) => (
+                  <WorkField field={field} label="Authors">
+                    {(isInvalid) => (
+                      <TagsInput
+                        value={field.state.value}
+                        onValueChange={(value) => field.handleChange(value)}
+                        disabled={isSubmitting}
+                        aria-invalid={isInvalid}
+                      >
+                        <TagsInputList>
+                          {field.state.value.map((author) => (
+                            <TagsInputItem key={author} value={author}>
+                              {author}
+                            </TagsInputItem>
+                          ))}
+                          <TagsInputInput placeholder="Add author and press Enter" />
+                        </TagsInputList>
+                      </TagsInput>
+                    )}
+                  </WorkField>
+                )}
+              </form.Field>
+              <form.Field name="abstract">
+                {(field) => (
+                  <WorkField field={field} label="Abstract" htmlFor={field.name}>
+                    {(isInvalid) => (
+                      <Textarea
+                        id={field.name}
+                        name={field.name}
+                        rows={4}
+                        placeholder="Summarize the research work..."
+                        value={field.state.value}
+                        disabled={isSubmitting}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        aria-invalid={isInvalid}
+                      />
+                    )}
+                  </WorkField>
+                )}
+              </form.Field>
+              <form.Field name="url">
+                {(field) => (
+                  <WorkField field={field} label="URL" htmlFor={field.name}>
+                    {(isInvalid) => (
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="url"
+                        placeholder="https://arxiv.org/abs/..."
+                        value={field.state.value}
+                        disabled={isSubmitting}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        aria-invalid={isInvalid}
+                      />
+                    )}
+                  </WorkField>
+                )}
+              </form.Field>
+              <DialogFooter>
+                <Button type="button" variant="outline" disabled={isSubmitting} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <LoaderCircleIcon className="animate-spin" aria-hidden="true" />}
+                  {isSubmitting
+                    ? isEditing
+                      ? "Saving..."
+                      : "Creating..."
+                    : isEditing
+                      ? "Save changes"
+                      : "Create work"}
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </form.Subscribe>
+      </form>
     </>
   );
 }
@@ -214,99 +313,10 @@ export function WorkDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const isEditing = !!work;
-  const createWork = useCreateWork();
-  const updateWork = useUpdateWork();
-  const isPending = isEditing ? updateWork.isPending : createWork.isPending;
-
-  const [values, setValues] = useState<WorkFormValues>(() => toFormValues(work));
-  const [errors, setErrors] = useState<FieldErrors>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (open) {
-      setValues(toFormValues(work));
-      setErrors({});
-      setSubmitError(null);
-    }
-  }, [open, work]);
-
-  const handleChange = (updates: Partial<WorkFormValues>) => {
-    setValues((prev) => ({ ...prev, ...updates }));
-    setErrors((prev) => {
-      const next = { ...prev };
-      for (const key of Object.keys(updates)) {
-        delete next[key as keyof WorkInput];
-      }
-      return next;
-    });
-    setSubmitError(null);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const result = parseValues(values);
-    if (!result.data) {
-      setErrors(result.errors);
-      return;
-    }
-
-    setSubmitError(null);
-    try {
-      if (isEditing && work) {
-        await updateWork.mutateAsync({ id: work.id, data: result.data });
-      } else {
-        await createWork.mutateAsync(result.data);
-      }
-      toast.add({
-        title: isEditing ? "Work updated" : "Work created",
-        description: result.data.title,
-        type: "success",
-      });
-      onOpenChange(false);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "An error occurred. Please try again.";
-      setSubmitError(message);
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit work" : "New work"}</DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Update the details of this research work."
-              : "Add a new research work to the Our Work page."}
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-          {submitError ? <FieldError>{submitError}</FieldError> : null}
-          <WorkFormFields
-            errors={errors}
-            values={values}
-            onChange={handleChange}
-            disabled={isPending}
-          />
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending && <LoaderCircleIcon className="animate-spin" aria-hidden="true" />}
-              {isEditing ? "Save changes" : "Create work"}
-            </Button>
-          </DialogFooter>
-        </form>
+        {open ? <WorkFormDialog work={work} onClose={() => onOpenChange(false)} /> : null}
       </DialogContent>
     </Dialog>
   );
