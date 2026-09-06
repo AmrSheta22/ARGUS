@@ -20,17 +20,8 @@ function WorkPage() {
   const { data, isPending, isError, refetch } = useQuery(publishedWorkQueryOptions());
 
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col bg-background px-6 py-10 sm:py-14">
-      <header className="flex items-center justify-between">
-        <Link to="/" className="inline-flex items-center gap-2.5">
-          <span aria-hidden="true" className="size-2 bg-primary" />
-          <span className="font-heading text-sm font-semibold tracking-[0.3em] uppercase">
-            ARGUS
-          </span>
-        </Link>
-      </header>
-
-      <section className="mt-16 flex flex-col gap-4 sm:mt-20">
+    <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col bg-background px-6 py-10">
+      <section className="flex flex-col gap-4">
         <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">Our work</h1>
         <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
           Research work by the ARGUS NLP Group.
