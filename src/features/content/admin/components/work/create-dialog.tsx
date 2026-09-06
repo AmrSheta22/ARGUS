@@ -34,8 +34,8 @@ import { workInputSchema, type Work, type WorkInput } from "../../../schemas.ts"
 import { useCreateWork, useUpdateWork } from "../../hooks.ts";
 
 type WorkFormValues = {
-  year: string;
   title: string;
+  year: string;
   area: string;
   status: WorkStatus;
   authors: string[];
@@ -48,8 +48,8 @@ type FieldErrors = Partial<Record<keyof WorkInput, string>>;
 
 function toFormValues(work: Work | null): WorkFormValues {
   return {
-    year: work?.year ? String(work.year) : String(new Date().getFullYear()),
     title: work?.title ?? "",
+    year: work?.year ? String(work.year) : String(new Date().getFullYear()),
     area: work?.area ?? "",
     status: work?.status ?? "under-review",
     authors: work?.authors ?? [],
@@ -93,32 +93,34 @@ function WorkFormFields({
 }) {
   return (
     <>
-      <Field>
-        <FieldLabel htmlFor="work-year">Year</FieldLabel>
-        <Input
-          id="work-year"
-          type="number"
-          min={1000}
-          max={2100}
-          value={values.year}
-          disabled={disabled}
-          aria-invalid={!!errors.year}
-          onChange={(e) => onChange({ year: e.target.value })}
-        />
-        {errors.year ? <FieldError>{errors.year}</FieldError> : null}
-      </Field>
-      <Field>
-        <FieldLabel htmlFor="work-title">Title</FieldLabel>
-        <Input
-          id="work-title"
-          placeholder="Robust Arabic misinformation detection under domain shift"
-          value={values.title}
-          disabled={disabled}
-          aria-invalid={!!errors.title}
-          onChange={(e) => onChange({ title: e.target.value })}
-        />
-        {errors.title ? <FieldError>{errors.title}</FieldError> : null}
-      </Field>
+      <div className="grid grid-cols-2 gap-4">
+        <Field>
+          <FieldLabel htmlFor="work-title">Title</FieldLabel>
+          <Input
+            id="work-title"
+            placeholder="Robust Arabic misinformation detection under domain shift"
+            value={values.title}
+            disabled={disabled}
+            aria-invalid={!!errors.title}
+            onChange={(e) => onChange({ title: e.target.value })}
+          />
+          {errors.title ? <FieldError>{errors.title}</FieldError> : null}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="work-year">Year</FieldLabel>
+          <Input
+            id="work-year"
+            type="number"
+            min={1000}
+            max={2100}
+            value={values.year}
+            disabled={disabled}
+            aria-invalid={!!errors.year}
+            onChange={(e) => onChange({ year: e.target.value })}
+          />
+          {errors.year ? <FieldError>{errors.year}</FieldError> : null}
+        </Field>
+      </div>
       <div className="grid grid-cols-2 gap-4">
         <Field>
           <FieldLabel htmlFor="work-area">Area</FieldLabel>
