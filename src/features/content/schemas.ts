@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { WORK_CONTENT_STATUSES } from "#/consts/content.ts";
 import type { Dto } from "#/lib/db/dto.ts";
-import type { videos, work } from "#/lib/db/schema/index.ts";
+import type { summaries, videos, work } from "#/lib/db/schema/index.ts";
 
 export const workInputSchema = z.object({
   year: z.number().int().min(1000).max(2100),
@@ -61,3 +61,30 @@ export const videoDeleteSchema = z.object({
 });
 
 export type Video = Dto<typeof videos.$inferSelect>;
+
+export const summaryInputSchema = z.object({
+  title: z.string().trim().min(1, "Title is required.").max(300),
+  subtitle: z.string().trim().max(500),
+  description: z.string().trim().min(1, "Description is required."),
+  url: z
+    .string()
+    .trim()
+    .max(1000)
+    .refine((value) => value === "" || z.url().safeParse(value).success, {
+      message: "Enter a valid URL or leave empty.",
+    }),
+  tags: z.array(z.string().trim().min(1, "Tag is required.").max(100)).max(30),
+});
+
+export type SummaryInput = z.infer<typeof summaryInputSchema>;
+
+export const summaryUpdateSchema = z.object({
+  id: z.number().int(),
+  data: summaryInputSchema,
+});
+
+export const summaryDeleteSchema = z.object({
+  id: z.number().int(),
+});
+
+export type Summary = Dto<typeof summaries.$inferSelect>;

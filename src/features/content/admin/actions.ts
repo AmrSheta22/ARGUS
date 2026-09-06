@@ -3,6 +3,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { adminMiddleware } from "#/lib/auth/middleware.ts";
 
 import {
+  summaryDeleteSchema,
+  summaryInputSchema,
+  summaryUpdateSchema,
   videoDeleteSchema,
   videoInputSchema,
   videoUpdateSchema,
@@ -10,6 +13,7 @@ import {
   workInputSchema,
   workUpdateSchema,
 } from "../schemas.ts";
+import { createSummary, deleteSummary, updateSummary } from "../summary.server.ts";
 import { createVideo, deleteVideo, updateVideo } from "../video.server.ts";
 import { createWork, deleteWork, updateWork } from "../work.server.ts";
 
@@ -53,4 +57,25 @@ export const $deleteVideo = createServerFn({ method: "POST" })
   .validator(videoDeleteSchema)
   .handler(async ({ data }) => {
     return deleteVideo(data.id);
+  });
+
+export const $createSummary = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(summaryInputSchema)
+  .handler(async ({ data }) => {
+    return createSummary(data);
+  });
+
+export const $updateSummary = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(summaryUpdateSchema)
+  .handler(async ({ data }) => {
+    return updateSummary(data.id, data.data);
+  });
+
+export const $deleteSummary = createServerFn({ method: "POST" })
+  .middleware([adminMiddleware])
+  .validator(summaryDeleteSchema)
+  .handler(async ({ data }) => {
+    return deleteSummary(data.id);
   });

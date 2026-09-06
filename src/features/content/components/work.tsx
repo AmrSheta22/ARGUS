@@ -1,14 +1,12 @@
 import { cn } from "cn";
-import { ArrowUpRightIcon } from "lucide-react";
 
 import { Badge } from "#/components/ui/badge.tsx";
-import { buttonVariants } from "#/components/ui/button.tsx";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "#/components/ui/card.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
 import { workStatusLabel } from "#/consts/content.ts";
 
 import type { Work } from "../schemas.ts";
-import { SectionLabel } from "./shared.tsx";
+import { ReadMoreLink, SectionLabel } from "./shared.tsx";
 
 export function FeaturedWork({ item }: { item: Work }) {
   return (
@@ -31,7 +29,7 @@ export function FeaturedWork({ item }: { item: Work }) {
         </CardContent>
         <CardFooter className="flex-wrap justify-between gap-3">
           <WorkMeta item={item} />
-          {item.url ? <ReadMoreLink item={item} size="default" /> : null}
+          {item.url ? <ReadMoreLink url={item.url} size="default" /> : null}
         </CardFooter>
       </Card>
     </section>
@@ -55,7 +53,7 @@ export function WorkCard({ item }: { item: Work }) {
       </CardContent>
       <CardFooter className="flex-wrap justify-between gap-3">
         <WorkMeta item={item} />
-        {item.url ? <ReadMoreLink item={item} size="sm" /> : null}
+        {item.url ? <ReadMoreLink url={item.url} size="sm" /> : null}
       </CardFooter>
     </Card>
   );
@@ -82,20 +80,6 @@ export function WorkMeta({ item, className }: { item: Work; className?: string }
       <Badge variant="secondary">{item.year}</Badge>
       {item.status ? <Badge variant="outline">{workStatusLabel(item.status)}</Badge> : null}
     </div>
-  );
-}
-
-export function ReadMoreLink({ item, size = "sm" }: { item: Work; size?: "sm" | "default" }) {
-  return (
-    <a
-      href={item.url ?? "#"}
-      target="_blank"
-      rel="noreferrer"
-      className={cn(buttonVariants({ variant: "outline", size }), "group/link")}
-    >
-      Read more
-      <ArrowUpRightIcon className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-    </a>
   );
 }
 

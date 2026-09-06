@@ -3,6 +3,13 @@ export type ParsedVideoSource =
   | { kind: "file" }
   | { kind: "link"; href: string };
 
+export function splitTags(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
 const DIRECT_VIDEO_PATTERN = /\.(mp4|webm|ogg|ogv|mov)(?:$|[?#])/i;
 const VIDEO_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
 

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BriefcaseIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react";
+import { BriefcaseIcon, FileTextIcon, LayoutDashboardIcon, VideoIcon } from "lucide-react";
 import * as React from "react";
 
 import {
@@ -33,6 +33,11 @@ const navItems = [
     label: "Videos",
     icon: VideoIcon,
     to: "/admin/videos",
+  },
+  {
+    label: "Summaries",
+    icon: FileTextIcon,
+    to: "/admin/summaries",
   },
 ] as const;
 

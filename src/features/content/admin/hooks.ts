@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { videoQueryKeys, workQueryKeys } from "../queries.ts";
-import type { Video, VideoInput, Work, WorkInput } from "../schemas.ts";
+import { summaryQueryKeys, videoQueryKeys, workQueryKeys } from "../queries.ts";
+import type { Summary, SummaryInput, Video, VideoInput, Work, WorkInput } from "../schemas.ts";
 import {
+  $createSummary,
+  $deleteSummary,
+  $updateSummary,
   $createVideo,
   $deleteVideo,
   $updateVideo,
@@ -75,6 +78,40 @@ export function useDeleteVideo() {
     mutationFn: async (video: Video) => $deleteVideo({ data: { id: video.id } }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: videoQueryKeys.all });
+    },
+  });
+}
+
+export function useCreateSummary() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: SummaryInput) => $createSummary({ data: input }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: summaryQueryKeys.all });
+    },
+  });
+}
+
+export function useUpdateSummary() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: SummaryInput }) =>
+      $updateSummary({ data: { id, data } }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: summaryQueryKeys.all });
+    },
+  });
+}
+
+export function useDeleteSummary() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (summary: Summary) => $deleteSummary({ data: { id: summary.id } }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: summaryQueryKeys.all });
     },
   });
 }

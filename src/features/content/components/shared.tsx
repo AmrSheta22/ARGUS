@@ -1,6 +1,8 @@
+import { cn } from "cn";
+import { ArrowUpRightIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { Button } from "#/components/ui/button.tsx";
+import { Button, buttonVariants } from "#/components/ui/button.tsx";
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
@@ -49,5 +51,29 @@ export function ContentEmptyState({ message }: { message: string }) {
     <div className="mt-12 flex flex-col items-center gap-2 rounded-none border border-dashed p-10 text-center">
       <p className="text-sm text-muted-foreground">{message}</p>
     </div>
+  );
+}
+
+export function ReadMoreLink({
+  url,
+  size = "sm",
+  label = "Read more",
+  className,
+}: {
+  url: string;
+  size?: "sm" | "default";
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer"
+      className={cn(buttonVariants({ variant: "outline", size }), "group/link", className)}
+    >
+      {label}
+      <ArrowUpRightIcon className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+    </a>
   );
 }
