@@ -1,14 +1,36 @@
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
+import { z } from "zod";
 
 import { authQueryOptions } from "#/lib/auth/queries.ts";
 
+/**
+ * `redirectUrl` is set by the `_auth` layout guard (and any other link) so that
+ * after a successful login/signup the user is sent back where they were headed.
+ * Only internal paths are accepted to avoid open redirects.
+ */
+const guestSearchSchema = z.object({
+  redirectUrl: z
+    .string()
+    .refine(
+      (value) =>
+        value === "/" ||
+        (value.startsWith("/") &&
+          !value.startsWith("//") &&
+          !value.includes("://") &&
+          !value.includes("?") &&
+          !value.includes("#")),
+      "redirectUrl must be an internal path",
+    )
+    .catch("/")
+    .default("/"),
+});
+
 export const Route = createFileRoute("/_guest")({
   component: RouteComponent,
-  beforeLoad: async ({ context }) => {
-    // Redirect path when session is already present,
-    // or after successful login/signup
-    const REDIRECT_URL = "/";
-
+  validateSearch: guestSearchSchema,
+  beforeLoad: async ({ context, search }) => {
+    // Already signed in, or landed here after a successful login/signup:
+    // bounce to the requested (or default) destination instead of the auth page.
     const session = await context.queryClient.query({
       ...authQueryOptions(),
       staleTime: "static",
@@ -17,13 +39,9 @@ export const Route = createFileRoute("/_guest")({
 
     if (session) {
       throw redirect({
-        to: REDIRECT_URL,
+        to: search.redirectUrl,
       });
     }
-
-    return {
-      redirectUrl: REDIRECT_URL,
-    };
   },
 });
 

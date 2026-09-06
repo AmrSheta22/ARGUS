@@ -9,7 +9,7 @@ import { authQueryOptions } from "#/lib/auth/queries.ts";
 export const Route = createFileRoute("/_auth")({
   component: Outlet,
   ssr: false,
-  beforeLoad: async ({ context }) => {
+  beforeLoad: async ({ context, location }) => {
     /**
      * beforeLoad runs on every navigation and prefetch, so we use TanStack Query
      * for client-side caching to speed up navigation, reducing client-to-server calls.
@@ -31,7 +31,10 @@ export const Route = createFileRoute("/_auth")({
     void context.queryClient.query(authQueryOptions());
 
     if (!session) {
-      throw redirect({ to: "/login" });
+      throw redirect({
+        to: "/login",
+        search: { redirectUrl: location.pathname },
+      });
     }
 
     return {

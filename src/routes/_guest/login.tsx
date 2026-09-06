@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_guest/login")({
 });
 
 function LoginForm() {
-  const { redirectUrl } = Route.useRouteContext();
+  const { redirectUrl } = Route.useSearch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -140,7 +140,7 @@ function LoginForm() {
 
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <Link to="/signup" className="underline underline-offset-4">
+        <Link to="/signup" search={{ redirectUrl }} className="underline underline-offset-4">
           Sign up
         </Link>
       </div>
