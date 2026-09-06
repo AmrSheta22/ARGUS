@@ -1,3 +1,4 @@
+import { useLocation } from "@tanstack/react-router";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { AdminSidebar } from "../../../components/admin/admin-sidebar";
@@ -16,9 +17,10 @@ export const Route = createFileRoute("/_auth/admin")({
 
 function RouteComponent() {
   const { session } = Route.useRouteContext();
+  const { pathname } = useLocation();
   return (
     <SidebarProvider>
-      <AdminSidebar session={session} />
+      <AdminSidebar session={session} pathname={pathname} />
       <SidebarInset>
         <Outlet />
       </SidebarInset>
