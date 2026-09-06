@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "read": {
+      "**/.env": "deny",
+      "**/.env.*": "deny",
+      "*": "allow"
+    }
+  },
+  "mcp": {
+    "better-auth": {
+      "type": "remote",
+      "url": "https://mcp.better-auth.com/mcp",
+      "enabled": true
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["npx", "shadcn@latest", "mcp"],
+      "enabled": true
+    },
+    "shoogle": {
+      "type": "remote",
+      "url": "https://mcp.shoogle.dev/mcp",
+      "enabled": true
+    }
+  }
+}
