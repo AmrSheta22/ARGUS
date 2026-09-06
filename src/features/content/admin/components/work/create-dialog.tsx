@@ -3,7 +3,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import { Button } from "#/components/ui/button.tsx";
-import { Checkbox } from "#/components/ui/checkbox.tsx";
 import {
   Dialog,
   DialogContent,
@@ -35,7 +34,6 @@ type WorkFormValues = {
   authors: string[];
   abstract: string;
   url: string;
-  published: boolean;
   sortOrder: string;
 };
 
@@ -51,7 +49,6 @@ function toFormValues(work: Work | null): WorkFormValues {
     authors: work?.authors ?? [],
     abstract: work?.abstract ?? "",
     url: work?.url ?? "",
-    published: work?.published ?? true,
     sortOrder: work?.sortOrder ? String(work.sortOrder) : "0",
   };
 }
@@ -201,16 +198,6 @@ function WorkFormFields({
         />
         {errors.url ? <FieldError>{errors.url}</FieldError> : null}
       </Field>
-      <Field orientation="horizontal">
-        <Checkbox
-          id="work-published"
-          name="work-published"
-          checked={values.published}
-          disabled={disabled}
-          onCheckedChange={(checked) => onChange({ published: !!checked })}
-        />
-        <FieldLabel htmlFor="work-published">Published</FieldLabel>
-      </Field>
     </>
   );
 }
@@ -291,7 +278,7 @@ export function WorkDialog({
           <DialogDescription>
             {isEditing
               ? "Update the details of this research work."
-              : "Publish a new research work to the Our Work page."}
+              : "Add a new research work to the Our Work page."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">

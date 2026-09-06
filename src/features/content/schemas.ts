@@ -16,7 +16,6 @@ export const workInputSchema = z.object({
       message: "Enter a valid URL or leave empty.",
     })
     .default(""),
-  published: z.boolean().default(true),
   sortOrder: z.number().int().default(0),
 });
 
@@ -41,7 +40,6 @@ export type Work = {
   authors: string[];
   abstract: string;
   url: string | null;
-  published: boolean;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;

@@ -1,13 +1,14 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { $listPublishedWork } from "./actions.ts";
+import { $listWork } from "./actions.ts";
 
 export const workQueryKeys = {
-  published: ["content", "work", "published"] as const,
+  all: ["content", "work"] as const,
+  list: () => [...workQueryKeys.all, "list"] as const,
 };
 
-export const publishedWorkQueryOptions = () =>
+export const workQueryOptions = () =>
   queryOptions({
-    queryKey: workQueryKeys.published,
-    queryFn: ({ signal }) => $listPublishedWork({ signal }),
+    queryKey: workQueryKeys.list(),
+    queryFn: ({ signal }) => $listWork({ signal }),
   });

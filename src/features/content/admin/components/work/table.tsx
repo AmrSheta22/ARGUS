@@ -10,7 +10,6 @@ import { PencilIcon, Trash2Icon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
 
-import { Badge } from "#/components/ui/badge.tsx";
 import { Button } from "#/components/ui/button.tsx";
 import {
   Dialog,
@@ -56,10 +55,6 @@ const dateFormatter = new Intl.DateTimeFormat(undefined, {
   dateStyle: "medium",
   timeStyle: "short",
 });
-
-function StatusBadge({ published }: { published: boolean }) {
-  return published ? <Badge>Published</Badge> : <Badge variant="secondary">Draft</Badge>;
-}
 
 type PaginationItemValue = number | "ellipsis-start" | "ellipsis-end";
 
@@ -117,10 +112,6 @@ export function WorkTable({ data, onEdit }: { data: Work[]; onEdit: (work: Work)
           cell: ({ row }) => (
             <span className="line-clamp-1 max-w-32">{row.original.status || "—"}</span>
           ),
-        }),
-        columnHelper.accessor("published", {
-          header: "Published",
-          cell: ({ row }) => <StatusBadge published={row.original.published} />,
         }),
         columnHelper.accessor("updatedAt", {
           header: "Updated",

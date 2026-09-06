@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, integer, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, integer, index } from "drizzle-orm/pg-core";
 
 export const videos = pgTable(
   "videos",
@@ -10,7 +10,6 @@ export const videos = pgTable(
     durationMinutes: integer("duration_minutes").notNull().default(0),
     url: text("url").notNull().default(""),
     description: text("description").notNull(),
-    published: boolean("published").default(true).notNull(),
     sortOrder: integer("sort_order").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -18,7 +17,7 @@ export const videos = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("videos_published_sort_order_idx").on(table.published, table.sortOrder)],
+  (table) => [index("videos_sort_order_idx").on(table.sortOrder)],
 );
 
 export const summaries = pgTable(
@@ -30,7 +29,6 @@ export const summaries = pgTable(
     description: text("description").notNull(),
     url: text("url").notNull().default(""),
     tags: text("tags").notNull().default(""),
-    published: boolean("published").default(true).notNull(),
     sortOrder: integer("sort_order").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -38,7 +36,7 @@ export const summaries = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("summaries_published_sort_order_idx").on(table.published, table.sortOrder)],
+  (table) => [index("summaries_sort_order_idx").on(table.sortOrder)],
 );
 
 export const knowledge = pgTable(
@@ -50,7 +48,6 @@ export const knowledge = pgTable(
     description: text("description").notNull(),
     url: text("url").notNull().default(""),
     tags: text("tags").notNull().default(""),
-    published: boolean("published").default(true).notNull(),
     sortOrder: integer("sort_order").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -58,7 +55,7 @@ export const knowledge = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("knowledge_published_sort_order_idx").on(table.published, table.sortOrder)],
+  (table) => [index("knowledge_sort_order_idx").on(table.sortOrder)],
 );
 
 export const work = pgTable(
@@ -73,7 +70,6 @@ export const work = pgTable(
     authors: text("authors").array().notNull().default([]),
     abstract: text("abstract").notNull(),
     url: text("url"),
-    published: boolean("published").default(true).notNull(),
     sortOrder: integer("sort_order").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -81,5 +77,5 @@ export const work = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("work_published_sort_order_idx").on(table.published, table.sortOrder)],
+  (table) => [index("work_sort_order_idx").on(table.sortOrder)],
 );

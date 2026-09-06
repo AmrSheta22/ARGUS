@@ -3,13 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { adminMiddleware } from "#/lib/auth/middleware.ts";
 
 import { workDeleteSchema, workInputSchema, workUpdateSchema } from "../schemas.ts";
-import { createWork, deleteWork, listWork, updateWork } from "../work.server.ts";
-
-export const $listWork = createServerFn({ method: "GET" })
-  .middleware([adminMiddleware])
-  .handler(async () => {
-    return listWork({ publishedOnly: false });
-  });
+import { createWork, deleteWork, updateWork } from "../work.server.ts";
 
 export const $createWork = createServerFn({ method: "POST" })
   .middleware([adminMiddleware])

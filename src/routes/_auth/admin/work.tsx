@@ -7,7 +7,7 @@ import { Button } from "#/components/ui/button.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
 import { WorkDialog } from "#/features/content/admin/components/work/create-dialog.tsx";
 import { WorkTable } from "#/features/content/admin/components/work/table.tsx";
-import { adminWorkQueryOptions } from "#/features/content/admin/queries.ts";
+import { workQueryOptions } from "#/features/content/queries.ts";
 import type { Work } from "#/features/content/schemas.ts";
 
 export const Route = createFileRoute("/_auth/admin/work")({
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_auth/admin/work")({
 });
 
 function WorkRoute() {
-  const { data, isPending, isError, refetch } = useQuery(adminWorkQueryOptions());
+  const { data, isPending, isError, refetch } = useQuery(workQueryOptions());
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingWork, setEditingWork] = useState<Work | null>(null);
 

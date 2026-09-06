@@ -19,7 +19,6 @@ function toWork(row: WorkRow): Work {
     authors: row.authors,
     abstract: row.abstract,
     url: row.url,
-    published: row.published,
     sortOrder: row.sortOrder,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -36,16 +35,12 @@ function toValues(input: WorkInput) {
     authors: input.authors,
     abstract: input.abstract,
     url: input.url || null,
-    published: input.published,
     sortOrder: input.sortOrder,
   };
 }
 
-export async function listWork({ publishedOnly }: { publishedOnly: boolean }): Promise<Work[]> {
-  const query = db.select().from(work);
-  const rows = publishedOnly
-    ? await query.where(eq(work.published, true)).orderBy(desc(work.sortOrder), desc(work.id))
-    : await query.orderBy(desc(work.sortOrder), desc(work.id));
+export async function listWork(): Promise<Work[]> {
+  const rows = await db.select().from(work).orderBy(desc(work.sortOrder), desc(work.id));
 
   return rows.map(toWork);
 }

@@ -8,16 +8,16 @@ import { Badge } from "#/components/ui/badge.tsx";
 import { Button, buttonVariants } from "#/components/ui/button.tsx";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "#/components/ui/card.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
-import { publishedWorkQueryOptions } from "#/features/content/queries.ts";
+import { workQueryOptions } from "#/features/content/queries.ts";
 import type { Work } from "#/features/content/schemas.ts";
 
 export const Route = createFileRoute("/work")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(publishedWorkQueryOptions()),
+  loader: ({ context }) => context.queryClient.ensureQueryData(workQueryOptions()),
   component: WorkPage,
 });
 
 function WorkPage() {
-  const { data, isPending, isError, refetch } = useQuery(publishedWorkQueryOptions());
+  const { data, isPending, isError, refetch } = useQuery(workQueryOptions());
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col bg-background px-6 py-10">
@@ -39,7 +39,7 @@ function WorkPage() {
         </div>
       ) : data.length === 0 ? (
         <div className="mt-12 flex flex-col items-center gap-2 rounded-none border border-dashed p-10 text-center">
-          <p className="text-sm text-muted-foreground">No research work published yet.</p>
+          <p className="text-sm text-muted-foreground">No research work yet.</p>
         </div>
       ) : (
         <div className="mt-10 flex flex-col gap-10">
