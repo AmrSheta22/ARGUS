@@ -8,6 +8,8 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { ThemeProvider } from "#/components/theme-provider.tsx";
 import { Toaster } from "#/components/ui/toast.tsx";
 
+import { TooltipProvider } from "../components/ui/tooltip";
+
 import appCss from "#/styles.css?url";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -47,7 +49,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider>
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster />
         </ThemeProvider>
 
