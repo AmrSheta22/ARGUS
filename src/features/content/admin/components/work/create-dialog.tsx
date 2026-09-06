@@ -14,6 +14,13 @@ import {
 import { Field, FieldError, FieldLabel } from "#/components/ui/field.tsx";
 import { Input } from "#/components/ui/input.tsx";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "#/components/ui/select.tsx";
+import {
   TagsInput,
   TagsInputInput,
   TagsInputItem,
@@ -21,6 +28,7 @@ import {
 } from "#/components/ui/tags-input.tsx";
 import { Textarea } from "#/components/ui/textarea.tsx";
 import { toast } from "#/components/ui/toast.tsx";
+import { WORK_CONTENT_STATUS_OPTIONS, type WorkStatus } from "#/consts/content.ts";
 
 import { workInputSchema, type Work, type WorkInput } from "../../../schemas.ts";
 import { useCreateWork, useUpdateWork } from "../../hooks.ts";
@@ -30,7 +38,7 @@ type WorkFormValues = {
   year: string;
   title: string;
   area: string;
-  status: string;
+  status: WorkStatus;
   authors: string[];
   abstract: string;
   url: string;
@@ -45,7 +53,7 @@ function toFormValues(work: Work | null): WorkFormValues {
     year: work?.year ? String(work.year) : String(new Date().getFullYear()),
     title: work?.title ?? "",
     area: work?.area ?? "",
-    status: work?.status ?? "",
+    status: work?.status ?? "under-review",
     authors: work?.authors ?? [],
     abstract: work?.abstract ?? "",
     url: work?.url ?? "",
@@ -141,15 +149,24 @@ function WorkFormFields({
           {errors.area ? <FieldError>{errors.area}</FieldError> : null}
         </Field>
         <Field>
-          <FieldLabel htmlFor="work-status">Status</FieldLabel>
-          <Input
-            id="work-status"
-            placeholder="Under review"
+          <FieldLabel>Status</FieldLabel>
+          <Select
             value={values.status}
+            onValueChange={(status) => onChange({ status: status ?? "under-review" })}
+            items={WORK_CONTENT_STATUS_OPTIONS}
             disabled={disabled}
-            aria-invalid={!!errors.status}
-            onChange={(e) => onChange({ status: e.target.value })}
-          />
+          >
+            <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              {WORK_CONTENT_STATUS_OPTIONS.map(({ value, label }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.status ? <FieldError>{errors.status}</FieldError> : null}
         </Field>
       </div>

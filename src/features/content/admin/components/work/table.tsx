@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "#/components/ui/table.tsx";
 import { toast } from "#/components/ui/toast.tsx";
+import { workStatusLabel } from "#/consts/content.ts";
 
 import type { Work } from "../../../schemas.ts";
 import { useDeleteWork } from "../../hooks.ts";
@@ -110,7 +111,9 @@ export function WorkTable({ data, onEdit }: { data: Work[]; onEdit: (work: Work)
         columnHelper.accessor("status", {
           header: "Status",
           cell: ({ row }) => (
-            <span className="line-clamp-1 max-w-32">{row.original.status || "—"}</span>
+            <span className="line-clamp-1 max-w-32">
+              {row.original.status ? workStatusLabel(row.original.status) : "—"}
+            </span>
           ),
         }),
         columnHelper.accessor("updatedAt", {

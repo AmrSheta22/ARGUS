@@ -8,6 +8,7 @@ import { Badge } from "#/components/ui/badge.tsx";
 import { Button, buttonVariants } from "#/components/ui/button.tsx";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "#/components/ui/card.tsx";
 import { Skeleton } from "#/components/ui/skeleton.tsx";
+import { workStatusLabel } from "#/consts/content.ts";
 import { workQueryOptions } from "#/features/content/queries.ts";
 import type { Work } from "#/features/content/schemas.ts";
 
@@ -142,7 +143,7 @@ function WorkMeta({ item, className }: { item: Work; className?: string }) {
     <div className={cn("flex flex-wrap items-center gap-1.5", className)}>
       <Badge variant="outline">{item.code}</Badge>
       <Badge variant="secondary">{item.year}</Badge>
-      {item.status ? <Badge variant="outline">{item.status}</Badge> : null}
+      {item.status ? <Badge variant="outline">{workStatusLabel(item.status)}</Badge> : null}
     </div>
   );
 }

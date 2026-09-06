@@ -1,11 +1,13 @@
 import { z } from "zod";
 
+import { WORK_CONTENT_STATUSES, type WorkStatus } from "#/consts/content.ts";
+
 export const workInputSchema = z.object({
   code: z.string().trim().min(1, "Code is required.").max(64),
   year: z.number().int().min(1000).max(2100),
   title: z.string().trim().min(1, "Title is required.").max(300),
   area: z.string().trim().min(1, "Area is required.").max(200),
-  status: z.string().trim().min(1, "Status is required.").max(120),
+  status: z.enum(WORK_CONTENT_STATUSES, "Status is required."),
   authors: z.array(z.string().trim().min(1)).min(1, "Add at least one author."),
   abstract: z.string().trim().min(1, "Abstract is required."),
   url: z
@@ -36,7 +38,7 @@ export type Work = {
   year: number;
   title: string;
   area: string;
-  status: string;
+  status: WorkStatus;
   authors: string[];
   abstract: string;
   url: string | null;

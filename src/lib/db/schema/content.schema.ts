@@ -1,4 +1,8 @@
-import { pgTable, text, timestamp, integer, index } from "drizzle-orm/pg-core";
+import { index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
+import { WORK_CONTENT_STATUSES } from "#/consts/content.ts";
+
+export const workStatus = pgEnum("work_status", WORK_CONTENT_STATUSES);
 
 export const videos = pgTable(
   "videos",
@@ -66,7 +70,7 @@ export const work = pgTable(
     year: integer("year").notNull(),
     title: text("title").notNull(),
     area: text("area").notNull().default(""),
-    status: text("status").notNull().default(""),
+    status: workStatus("status").notNull().default("under-review"),
     authors: text("authors").array().notNull().default([]),
     abstract: text("abstract").notNull(),
     url: text("url"),
