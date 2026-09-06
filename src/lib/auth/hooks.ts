@@ -1,5 +1,7 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 
+import { authClient } from "./auth-client";
 import { authQueryOptions } from "./queries";
 
 /**
@@ -19,4 +21,24 @@ export function useAuth() {
 export function useAuthSuspense() {
   const { data: user } = useSuspenseQuery(authQueryOptions());
   return { user };
+}
+
+export function useSignOut() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async () => {
+      const { data, error } = await authClient.signOut({
+        fetchOptions: {
+          onResponse: async () => {
+            // manually set to null to avoid unnecessary refetching
+            queryClient.setQueryData(authQueryOptions().queryKey, null);
+            await router.invalidate();
+          },
+        },
+      });
+      if (error) throw error;
+      return data;
+    },
+  });
 }
