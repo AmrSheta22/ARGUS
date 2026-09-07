@@ -2,7 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { adminMiddleware } from "#/lib/auth/middleware.ts";
 
-import { createKnowledge, deleteKnowledge, updateKnowledge } from "../knowledge.server.ts";
+import {
+  createKnowledge,
+  deleteKnowledge,
+  listKnowledge,
+  updateKnowledge,
+} from "../knowledge.server.ts";
 import {
   knowledgeDeleteSchema,
   knowledgeInputSchema,
@@ -17,9 +22,22 @@ import {
   workInputSchema,
   workUpdateSchema,
 } from "../schemas.ts";
-import { createSummary, deleteSummary, updateSummary } from "../summary.server.ts";
-import { createVideo, deleteVideo, updateVideo } from "../video.server.ts";
-import { createWork, deleteWork, updateWork } from "../work.server.ts";
+import { createSummary, deleteSummary, listSummaries, updateSummary } from "../summary.server.ts";
+import { createVideo, deleteVideo, listVideos, updateVideo } from "../video.server.ts";
+import { createWork, deleteWork, listWork, updateWork } from "../work.server.ts";
+
+export const $getContentOverview = createServerFn({ method: "GET" })
+  .middleware([adminMiddleware])
+  .handler(async () => {
+    const [work, videos, summaries, knowledge] = await Promise.all([
+      listWork(),
+      listVideos(),
+      listSummaries(),
+      listKnowledge(),
+    ]);
+
+    return { work, videos, summaries, knowledge };
+  });
 
 export const $createWork = createServerFn({ method: "POST" })
   .middleware([adminMiddleware])
