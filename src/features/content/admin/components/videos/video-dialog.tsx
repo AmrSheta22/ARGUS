@@ -3,16 +3,16 @@ import { LoaderCircleIcon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { Button } from "#/components/ui/button.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "#/components/ui/dialog.tsx";
 import { Field, FieldError, FieldLabel } from "#/components/ui/field.tsx";
 import { Input } from "#/components/ui/input.tsx";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "#/components/ui/responsive-dialog.tsx";
 import { Textarea } from "#/components/ui/textarea.tsx";
 import { toast } from "#/components/ui/toast.tsx";
 
@@ -95,14 +95,14 @@ function VideoFormDialog({ video, onClose }: { video: Video | null; onClose: () 
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>{isEditing ? "Edit video" : "New video"}</DialogTitle>
-        <DialogDescription>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>{isEditing ? "Edit video" : "New video"}</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription>
           {isEditing
             ? "Update the details of this video."
             : "Add a new curated video to the Videos page."}
-        </DialogDescription>
-      </DialogHeader>
+        </ResponsiveDialogDescription>
+      </ResponsiveDialogHeader>
       <form
         noValidate
         className="flex flex-col gap-4"
@@ -233,7 +233,7 @@ function VideoFormDialog({ video, onClose }: { video: Video | null; onClose: () 
                   </VideoField>
                 )}
               </form.Field>
-              <DialogFooter>
+              <ResponsiveDialogFooter>
                 <Button type="button" variant="outline" disabled={isSubmitting} onClick={onClose}>
                   Cancel
                 </Button>
@@ -247,7 +247,7 @@ function VideoFormDialog({ video, onClose }: { video: Video | null; onClose: () 
                       ? "Save changes"
                       : "Create video"}
                 </Button>
-              </DialogFooter>
+              </ResponsiveDialogFooter>
             </>
           )}
         </form.Subscribe>
@@ -266,10 +266,10 @@ export function VideoDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent className="data-[variant=dialog]:max-w-lg">
         {open ? <VideoFormDialog video={video} onClose={() => onOpenChange(false)} /> : null}
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

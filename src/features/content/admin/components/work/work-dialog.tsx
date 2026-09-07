@@ -3,16 +3,16 @@ import { LoaderCircleIcon } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { Button } from "#/components/ui/button.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "#/components/ui/dialog.tsx";
 import { Field, FieldError, FieldLabel } from "#/components/ui/field.tsx";
 import { Input } from "#/components/ui/input.tsx";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "#/components/ui/responsive-dialog.tsx";
 import {
   Select,
   SelectContent,
@@ -110,14 +110,14 @@ function WorkFormDialog({ work, onClose }: { work: Work | null; onClose: () => v
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>{isEditing ? "Edit work" : "New work"}</DialogTitle>
-        <DialogDescription>
+      <ResponsiveDialogHeader>
+        <ResponsiveDialogTitle>{isEditing ? "Edit work" : "New work"}</ResponsiveDialogTitle>
+        <ResponsiveDialogDescription>
           {isEditing
             ? "Update the details of this research work."
             : "Add a new research work to the Our Work page."}
-        </DialogDescription>
-      </DialogHeader>
+        </ResponsiveDialogDescription>
+      </ResponsiveDialogHeader>
       <form
         noValidate
         className="flex flex-col gap-4"
@@ -281,7 +281,7 @@ function WorkFormDialog({ work, onClose }: { work: Work | null; onClose: () => v
                   </WorkField>
                 )}
               </form.Field>
-              <DialogFooter>
+              <ResponsiveDialogFooter>
                 <Button type="button" variant="outline" disabled={isSubmitting} onClick={onClose}>
                   Cancel
                 </Button>
@@ -295,7 +295,7 @@ function WorkFormDialog({ work, onClose }: { work: Work | null; onClose: () => v
                       ? "Save changes"
                       : "Create work"}
                 </Button>
-              </DialogFooter>
+              </ResponsiveDialogFooter>
             </>
           )}
         </form.Subscribe>
@@ -314,10 +314,10 @@ export function WorkDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent className="data-[variant=dialog]:max-w-lg">
         {open ? <WorkFormDialog work={work} onClose={() => onOpenChange(false)} /> : null}
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }
