@@ -14,7 +14,7 @@ import { signUpSchema } from "#/lib/auth/schemas.ts";
 import { getAuthErrorMessage } from "#/lib/auth/utils.ts";
 import { setFieldErrors } from "#/lib/form.ts";
 
-export const Route = createFileRoute("/_guest/signup")({
+export const Route = createFileRoute("/_sharedLayout/_guest/signup")({
   component: SignupForm,
 });
 

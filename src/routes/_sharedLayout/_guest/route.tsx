@@ -25,7 +25,7 @@ const guestSearchSchema = z.object({
     .default("/"),
 });
 
-export const Route = createFileRoute("/_guest")({
+export const Route = createFileRoute("/_sharedLayout/_guest")({
   component: RouteComponent,
   validateSearch: guestSearchSchema,
   beforeLoad: async ({ context, search }) => {
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/_guest")({
 
 function RouteComponent() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6">
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-background p-6">
       <div className="flex w-full max-w-sm flex-col gap-2">
         <Link
           to="/"

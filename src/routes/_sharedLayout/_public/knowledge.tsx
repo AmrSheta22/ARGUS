@@ -14,7 +14,7 @@ import {
 } from "#/features/content/components/shared.tsx";
 import { knowledgeQueryOptions } from "#/features/content/queries.ts";
 
-export const Route = createFileRoute("/_public/knowledge")({
+export const Route = createFileRoute("/_sharedLayout/_public/knowledge")({
   loader: ({ context }) => context.queryClient.ensureQueryData(knowledgeQueryOptions()),
   component: KnowledgePage,
 });

@@ -15,7 +15,7 @@ import { loginSchema } from "#/lib/auth/schemas.ts";
 import { getAuthErrorMessage } from "#/lib/auth/utils.ts";
 import { setFormErrors } from "#/lib/form.ts";
 
-export const Route = createFileRoute("/_guest/login")({
+export const Route = createFileRoute("/_sharedLayout/_guest/login")({
   component: LoginForm,
 });
 

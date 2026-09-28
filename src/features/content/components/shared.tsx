@@ -25,7 +25,7 @@ export function ContentPage({
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto flex min-h-svh w-full max-w-6xl flex-col bg-background px-6 py-10">
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col bg-background px-6 py-10">
       <section className="flex flex-col gap-4">
         <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
         <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>

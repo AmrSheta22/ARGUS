@@ -10,7 +10,7 @@ import {
 import { FeaturedVideo, VideoCard, VideoSkeletons } from "#/features/content/components/videos.tsx";
 import { videoQueryOptions } from "#/features/content/queries.ts";
 
-export const Route = createFileRoute("/_public/videos")({
+export const Route = createFileRoute("/_sharedLayout/_public/videos")({
   loader: ({ context }) => context.queryClient.ensureQueryData(videoQueryOptions()),
   component: VideosPage,
 });

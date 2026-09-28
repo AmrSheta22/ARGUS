@@ -10,33 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
-import { Route as GuestRouteRouteImport } from './routes/_guest/route'
-import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as SharedLayoutRouteRouteImport } from './routes/_sharedLayout/route'
 import { Route as AuthAdminRouteRouteImport } from './routes/_auth/admin/route'
-import { Route as GuestLoginRouteImport } from './routes/_guest/login'
-import { Route as GuestSignupRouteImport } from './routes/_guest/signup'
-import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as PublicKnowledgeRouteImport } from './routes/_public/knowledge'
-import { Route as PublicSummariesRouteImport } from './routes/_public/summaries'
-import { Route as PublicVideosRouteImport } from './routes/_public/videos'
-import { Route as PublicWorkRouteImport } from './routes/_public/work'
+import { Route as SharedLayoutGuestRouteRouteImport } from './routes/_sharedLayout/_guest/route'
 import { Route as AuthAdminIndexRouteImport } from './routes/_auth/admin/index'
 import { Route as AuthAdminKnowledgeRouteImport } from './routes/_auth/admin/knowledge'
 import { Route as AuthAdminSummariesRouteImport } from './routes/_auth/admin/summaries'
 import { Route as AuthAdminVideosRouteImport } from './routes/_auth/admin/videos'
 import { Route as AuthAdminWorkRouteImport } from './routes/_auth/admin/work'
+import { Route as SharedLayoutGuestLoginRouteImport } from './routes/_sharedLayout/_guest/login'
+import { Route as SharedLayoutGuestSignupRouteImport } from './routes/_sharedLayout/_guest/signup'
+import { Route as SharedLayoutPublicIndexRouteImport } from './routes/_sharedLayout/_public/index'
+import { Route as SharedLayoutPublicKnowledgeRouteImport } from './routes/_sharedLayout/_public/knowledge'
+import { Route as SharedLayoutPublicSummariesRouteImport } from './routes/_sharedLayout/_public/summaries'
+import { Route as SharedLayoutPublicVideosRouteImport } from './routes/_sharedLayout/_public/videos'
+import { Route as SharedLayoutPublicWorkRouteImport } from './routes/_sharedLayout/_public/work'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuestRouteRoute = GuestRouteRouteImport.update({
-  id: '/_guest',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PublicRouteRoute = PublicRouteRouteImport.update({
-  id: '/_public',
+const SharedLayoutRouteRoute = SharedLayoutRouteRouteImport.update({
+  id: '/_sharedLayout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAdminRouteRoute = AuthAdminRouteRouteImport.update({
@@ -44,40 +40,9 @@ const AuthAdminRouteRoute = AuthAdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const GuestLoginRoute = GuestLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => GuestRouteRoute,
-} as any)
-const GuestSignupRoute = GuestSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => GuestRouteRoute,
-} as any)
-const PublicIndexRoute = PublicIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicKnowledgeRoute = PublicKnowledgeRouteImport.update({
-  id: '/knowledge',
-  path: '/knowledge',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicSummariesRoute = PublicSummariesRouteImport.update({
-  id: '/summaries',
-  path: '/summaries',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicVideosRoute = PublicVideosRouteImport.update({
-  id: '/videos',
-  path: '/videos',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicWorkRoute = PublicWorkRouteImport.update({
-  id: '/work',
-  path: '/work',
-  getParentRoute: () => PublicRouteRoute,
+const SharedLayoutGuestRouteRoute = SharedLayoutGuestRouteRouteImport.update({
+  id: '/_guest',
+  getParentRoute: () => SharedLayoutRouteRoute,
 } as any)
 const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
   id: '/',
@@ -104,6 +69,44 @@ const AuthAdminWorkRoute = AuthAdminWorkRouteImport.update({
   path: '/work',
   getParentRoute: () => AuthAdminRouteRoute,
 } as any)
+const SharedLayoutGuestLoginRoute = SharedLayoutGuestLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => SharedLayoutGuestRouteRoute,
+} as any)
+const SharedLayoutGuestSignupRoute = SharedLayoutGuestSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => SharedLayoutGuestRouteRoute,
+} as any)
+const SharedLayoutPublicIndexRoute = SharedLayoutPublicIndexRouteImport.update({
+  id: '/_public/',
+  path: '/',
+  getParentRoute: () => SharedLayoutRouteRoute,
+} as any)
+const SharedLayoutPublicKnowledgeRoute =
+  SharedLayoutPublicKnowledgeRouteImport.update({
+    id: '/_public/knowledge',
+    path: '/knowledge',
+    getParentRoute: () => SharedLayoutRouteRoute,
+  } as any)
+const SharedLayoutPublicSummariesRoute =
+  SharedLayoutPublicSummariesRouteImport.update({
+    id: '/_public/summaries',
+    path: '/summaries',
+    getParentRoute: () => SharedLayoutRouteRoute,
+  } as any)
+const SharedLayoutPublicVideosRoute =
+  SharedLayoutPublicVideosRouteImport.update({
+    id: '/_public/videos',
+    path: '/videos',
+    getParentRoute: () => SharedLayoutRouteRoute,
+  } as any)
+const SharedLayoutPublicWorkRoute = SharedLayoutPublicWorkRouteImport.update({
+  id: '/_public/work',
+  path: '/work',
+  getParentRoute: () => SharedLayoutRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -111,113 +114,112 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof PublicIndexRoute
+  '/': typeof SharedLayoutPublicIndexRoute
   '/admin': typeof AuthAdminRouteRouteWithChildren
-  '/login': typeof GuestLoginRoute
-  '/signup': typeof GuestSignupRoute
-  '/knowledge': typeof PublicKnowledgeRoute
-  '/summaries': typeof PublicSummariesRoute
-  '/videos': typeof PublicVideosRoute
-  '/work': typeof PublicWorkRoute
   '/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/admin/summaries': typeof AuthAdminSummariesRoute
   '/admin/videos': typeof AuthAdminVideosRoute
   '/admin/work': typeof AuthAdminWorkRoute
+  '/login': typeof SharedLayoutGuestLoginRoute
+  '/signup': typeof SharedLayoutGuestSignupRoute
+  '/knowledge': typeof SharedLayoutPublicKnowledgeRoute
+  '/summaries': typeof SharedLayoutPublicSummariesRoute
+  '/videos': typeof SharedLayoutPublicVideosRoute
+  '/work': typeof SharedLayoutPublicWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof AuthAdminIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof PublicIndexRoute
-  '/login': typeof GuestLoginRoute
-  '/signup': typeof GuestSignupRoute
-  '/knowledge': typeof PublicKnowledgeRoute
-  '/summaries': typeof PublicSummariesRoute
-  '/videos': typeof PublicVideosRoute
-  '/work': typeof PublicWorkRoute
+  '/': typeof SharedLayoutPublicIndexRoute
   '/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/admin/summaries': typeof AuthAdminSummariesRoute
   '/admin/videos': typeof AuthAdminVideosRoute
   '/admin/work': typeof AuthAdminWorkRoute
+  '/login': typeof SharedLayoutGuestLoginRoute
+  '/signup': typeof SharedLayoutGuestSignupRoute
+  '/knowledge': typeof SharedLayoutPublicKnowledgeRoute
+  '/summaries': typeof SharedLayoutPublicSummariesRoute
+  '/videos': typeof SharedLayoutPublicVideosRoute
+  '/work': typeof SharedLayoutPublicWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin': typeof AuthAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_guest': typeof GuestRouteRouteWithChildren
-  '/_public': typeof PublicRouteRouteWithChildren
+  '/_sharedLayout': typeof SharedLayoutRouteRouteWithChildren
   '/_auth/admin': typeof AuthAdminRouteRouteWithChildren
-  '/_guest/login': typeof GuestLoginRoute
-  '/_guest/signup': typeof GuestSignupRoute
-  '/_public/knowledge': typeof PublicKnowledgeRoute
-  '/_public/summaries': typeof PublicSummariesRoute
-  '/_public/videos': typeof PublicVideosRoute
-  '/_public/work': typeof PublicWorkRoute
-  '/_public/': typeof PublicIndexRoute
+  '/_sharedLayout/_guest': typeof SharedLayoutGuestRouteRouteWithChildren
   '/_auth/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/_auth/admin/summaries': typeof AuthAdminSummariesRoute
   '/_auth/admin/videos': typeof AuthAdminVideosRoute
   '/_auth/admin/work': typeof AuthAdminWorkRoute
+  '/_sharedLayout/_guest/login': typeof SharedLayoutGuestLoginRoute
+  '/_sharedLayout/_guest/signup': typeof SharedLayoutGuestSignupRoute
+  '/_sharedLayout/_public/knowledge': typeof SharedLayoutPublicKnowledgeRoute
+  '/_sharedLayout/_public/summaries': typeof SharedLayoutPublicSummariesRoute
+  '/_sharedLayout/_public/videos': typeof SharedLayoutPublicVideosRoute
+  '/_sharedLayout/_public/work': typeof SharedLayoutPublicWorkRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/admin/': typeof AuthAdminIndexRoute
+  '/_sharedLayout/_public/': typeof SharedLayoutPublicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/admin/knowledge'
+    | '/admin/summaries'
+    | '/admin/videos'
+    | '/admin/work'
     | '/login'
     | '/signup'
     | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
-    | '/admin/knowledge'
-    | '/admin/summaries'
-    | '/admin/videos'
-    | '/admin/work'
     | '/api/auth/$'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/knowledge'
+    | '/admin/summaries'
+    | '/admin/videos'
+    | '/admin/work'
     | '/login'
     | '/signup'
     | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
-    | '/admin/knowledge'
-    | '/admin/summaries'
-    | '/admin/videos'
-    | '/admin/work'
     | '/api/auth/$'
     | '/admin'
   id:
     | '__root__'
     | '/_auth'
-    | '/_guest'
-    | '/_public'
+    | '/_sharedLayout'
     | '/_auth/admin'
-    | '/_guest/login'
-    | '/_guest/signup'
-    | '/_public/knowledge'
-    | '/_public/summaries'
-    | '/_public/videos'
-    | '/_public/work'
-    | '/_public/'
+    | '/_sharedLayout/_guest'
     | '/_auth/admin/knowledge'
     | '/_auth/admin/summaries'
     | '/_auth/admin/videos'
     | '/_auth/admin/work'
+    | '/_sharedLayout/_guest/login'
+    | '/_sharedLayout/_guest/signup'
+    | '/_sharedLayout/_public/knowledge'
+    | '/_sharedLayout/_public/summaries'
+    | '/_sharedLayout/_public/videos'
+    | '/_sharedLayout/_public/work'
     | '/api/auth/$'
     | '/_auth/admin/'
+    | '/_sharedLayout/_public/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  GuestRouteRoute: typeof GuestRouteRouteWithChildren
-  PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  SharedLayoutRouteRoute: typeof SharedLayoutRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -230,18 +232,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_guest': {
-      id: '/_guest'
+    '/_sharedLayout': {
+      id: '/_sharedLayout'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof GuestRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_public': {
-      id: '/_public'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof PublicRouteRouteImport
+      preLoaderRoute: typeof SharedLayoutRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/admin': {
@@ -251,54 +246,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_guest/login': {
-      id: '/_guest/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof GuestLoginRouteImport
-      parentRoute: typeof GuestRouteRoute
-    }
-    '/_guest/signup': {
-      id: '/_guest/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof GuestSignupRouteImport
-      parentRoute: typeof GuestRouteRoute
-    }
-    '/_public/': {
-      id: '/_public/'
-      path: '/'
+    '/_sharedLayout/_guest': {
+      id: '/_sharedLayout/_guest'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/knowledge': {
-      id: '/_public/knowledge'
-      path: '/knowledge'
-      fullPath: '/knowledge'
-      preLoaderRoute: typeof PublicKnowledgeRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/summaries': {
-      id: '/_public/summaries'
-      path: '/summaries'
-      fullPath: '/summaries'
-      preLoaderRoute: typeof PublicSummariesRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/videos': {
-      id: '/_public/videos'
-      path: '/videos'
-      fullPath: '/videos'
-      preLoaderRoute: typeof PublicVideosRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/work': {
-      id: '/_public/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof PublicWorkRouteImport
-      parentRoute: typeof PublicRouteRoute
+      preLoaderRoute: typeof SharedLayoutGuestRouteRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
     }
     '/_auth/admin/': {
       id: '/_auth/admin/'
@@ -334,6 +287,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/work'
       preLoaderRoute: typeof AuthAdminWorkRouteImport
       parentRoute: typeof AuthAdminRouteRoute
+    }
+    '/_sharedLayout/_guest/login': {
+      id: '/_sharedLayout/_guest/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof SharedLayoutGuestLoginRouteImport
+      parentRoute: typeof SharedLayoutGuestRouteRoute
+    }
+    '/_sharedLayout/_guest/signup': {
+      id: '/_sharedLayout/_guest/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SharedLayoutGuestSignupRouteImport
+      parentRoute: typeof SharedLayoutGuestRouteRoute
+    }
+    '/_sharedLayout/_public/': {
+      id: '/_sharedLayout/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SharedLayoutPublicIndexRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
+    }
+    '/_sharedLayout/_public/knowledge': {
+      id: '/_sharedLayout/_public/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof SharedLayoutPublicKnowledgeRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
+    }
+    '/_sharedLayout/_public/summaries': {
+      id: '/_sharedLayout/_public/summaries'
+      path: '/summaries'
+      fullPath: '/summaries'
+      preLoaderRoute: typeof SharedLayoutPublicSummariesRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
+    }
+    '/_sharedLayout/_public/videos': {
+      id: '/_sharedLayout/_public/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof SharedLayoutPublicVideosRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
+    }
+    '/_sharedLayout/_public/work': {
+      id: '/_sharedLayout/_public/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof SharedLayoutPublicWorkRouteImport
+      parentRoute: typeof SharedLayoutRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -377,44 +379,46 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface GuestRouteRouteChildren {
-  GuestLoginRoute: typeof GuestLoginRoute
-  GuestSignupRoute: typeof GuestSignupRoute
+interface SharedLayoutGuestRouteRouteChildren {
+  SharedLayoutGuestLoginRoute: typeof SharedLayoutGuestLoginRoute
+  SharedLayoutGuestSignupRoute: typeof SharedLayoutGuestSignupRoute
 }
 
-const GuestRouteRouteChildren: GuestRouteRouteChildren = {
-  GuestLoginRoute: GuestLoginRoute,
-  GuestSignupRoute: GuestSignupRoute,
+const SharedLayoutGuestRouteRouteChildren: SharedLayoutGuestRouteRouteChildren =
+  {
+    SharedLayoutGuestLoginRoute: SharedLayoutGuestLoginRoute,
+    SharedLayoutGuestSignupRoute: SharedLayoutGuestSignupRoute,
+  }
+
+const SharedLayoutGuestRouteRouteWithChildren =
+  SharedLayoutGuestRouteRoute._addFileChildren(
+    SharedLayoutGuestRouteRouteChildren,
+  )
+
+interface SharedLayoutRouteRouteChildren {
+  SharedLayoutGuestRouteRoute: typeof SharedLayoutGuestRouteRouteWithChildren
+  SharedLayoutPublicKnowledgeRoute: typeof SharedLayoutPublicKnowledgeRoute
+  SharedLayoutPublicSummariesRoute: typeof SharedLayoutPublicSummariesRoute
+  SharedLayoutPublicVideosRoute: typeof SharedLayoutPublicVideosRoute
+  SharedLayoutPublicWorkRoute: typeof SharedLayoutPublicWorkRoute
+  SharedLayoutPublicIndexRoute: typeof SharedLayoutPublicIndexRoute
 }
 
-const GuestRouteRouteWithChildren = GuestRouteRoute._addFileChildren(
-  GuestRouteRouteChildren,
-)
-
-interface PublicRouteRouteChildren {
-  PublicKnowledgeRoute: typeof PublicKnowledgeRoute
-  PublicSummariesRoute: typeof PublicSummariesRoute
-  PublicVideosRoute: typeof PublicVideosRoute
-  PublicWorkRoute: typeof PublicWorkRoute
-  PublicIndexRoute: typeof PublicIndexRoute
+const SharedLayoutRouteRouteChildren: SharedLayoutRouteRouteChildren = {
+  SharedLayoutGuestRouteRoute: SharedLayoutGuestRouteRouteWithChildren,
+  SharedLayoutPublicKnowledgeRoute: SharedLayoutPublicKnowledgeRoute,
+  SharedLayoutPublicSummariesRoute: SharedLayoutPublicSummariesRoute,
+  SharedLayoutPublicVideosRoute: SharedLayoutPublicVideosRoute,
+  SharedLayoutPublicWorkRoute: SharedLayoutPublicWorkRoute,
+  SharedLayoutPublicIndexRoute: SharedLayoutPublicIndexRoute,
 }
 
-const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicKnowledgeRoute: PublicKnowledgeRoute,
-  PublicSummariesRoute: PublicSummariesRoute,
-  PublicVideosRoute: PublicVideosRoute,
-  PublicWorkRoute: PublicWorkRoute,
-  PublicIndexRoute: PublicIndexRoute,
-}
-
-const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
-  PublicRouteRouteChildren,
-)
+const SharedLayoutRouteRouteWithChildren =
+  SharedLayoutRouteRoute._addFileChildren(SharedLayoutRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  GuestRouteRoute: GuestRouteRouteWithChildren,
-  PublicRouteRoute: PublicRouteRouteWithChildren,
+  SharedLayoutRouteRoute: SharedLayoutRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

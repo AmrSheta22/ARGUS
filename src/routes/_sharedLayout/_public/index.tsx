@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { EyeField } from "../../components/marketing/eye-field";
+import { EyeField } from "../../../components/marketing/eye-field";
 
-export const Route = createFileRoute("/_public/")({
+export const Route = createFileRoute("/_sharedLayout/_public/")({
   component: HomePage,
 });
 
 function HomePage() {
   return (
-    <div>
+    <div className="relative flex flex-1 flex-col">
       <EyeField />
 
       {/* soft paper vignette that keeps center readable */}
@@ -17,7 +17,7 @@ function HomePage() {
         className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(circle_at_50%_46%,oklch(0.9606_0.01643_79.35/94%)_0_13%,oklch(0.9606_0.01643_79.35/68%)_28%,transparent_66%)]"
       />
 
-      <section className="pointer-events-none relative z-3 flex min-h-svh flex-col items-center justify-center px-6 pt-21 pb-22.5 text-center">
+      <section className="pointer-events-none relative z-3 flex flex-1 flex-col items-center justify-center px-6 pt-21 pb-22.5 text-center">
         <img
           className="mb-2 h-[clamp(82px,8vw,118px)] w-[clamp(82px,8vw,118px)] rounded-full object-cover mix-blend-multiply shadow-[0_0_0_1px_oklch(0.3609_0.03245_55.14/18%)]"
           src="/logo-2.png"
