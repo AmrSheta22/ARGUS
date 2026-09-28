@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as GuestRouteRouteImport } from './routes/_guest/route'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthAdminRouteRouteImport } from './routes/_auth/admin/route'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
 import { Route as GuestSignupRouteImport } from './routes/_guest/signup'
@@ -34,6 +35,10 @@ const GuestRouteRoute = GuestRouteRouteImport.update({
   id: '/_guest',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthAdminRouteRoute = AuthAdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -50,29 +55,29 @@ const GuestSignupRoute = GuestSignupRouteImport.update({
   getParentRoute: () => GuestRouteRoute,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
-  id: '/_public/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicKnowledgeRoute = PublicKnowledgeRouteImport.update({
-  id: '/_public/knowledge',
+  id: '/knowledge',
   path: '/knowledge',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicSummariesRoute = PublicSummariesRouteImport.update({
-  id: '/_public/summaries',
+  id: '/summaries',
   path: '/summaries',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicVideosRoute = PublicVideosRouteImport.update({
-  id: '/_public/videos',
+  id: '/videos',
   path: '/videos',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const PublicWorkRoute = PublicWorkRouteImport.update({
-  id: '/_public/work',
+  id: '/work',
   path: '/work',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
   id: '/',
@@ -140,6 +145,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_guest': typeof GuestRouteRouteWithChildren
+  '/_public': typeof PublicRouteRouteWithChildren
   '/_auth/admin': typeof AuthAdminRouteRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
   '/_guest/signup': typeof GuestSignupRoute
@@ -191,6 +197,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth'
     | '/_guest'
+    | '/_public'
     | '/_auth/admin'
     | '/_guest/login'
     | '/_guest/signup'
@@ -210,11 +217,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   GuestRouteRoute: typeof GuestRouteRouteWithChildren
-  PublicKnowledgeRoute: typeof PublicKnowledgeRoute
-  PublicSummariesRoute: typeof PublicSummariesRoute
-  PublicVideosRoute: typeof PublicVideosRoute
-  PublicWorkRoute: typeof PublicWorkRoute
-  PublicIndexRoute: typeof PublicIndexRoute
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -232,6 +235,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof GuestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/admin': {
@@ -260,35 +270,35 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/knowledge': {
       id: '/_public/knowledge'
       path: '/knowledge'
       fullPath: '/knowledge'
       preLoaderRoute: typeof PublicKnowledgeRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/summaries': {
       id: '/_public/summaries'
       path: '/summaries'
       fullPath: '/summaries'
       preLoaderRoute: typeof PublicSummariesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/videos': {
       id: '/_public/videos'
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof PublicVideosRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_public/work': {
       id: '/_public/work'
       path: '/work'
       fullPath: '/work'
       preLoaderRoute: typeof PublicWorkRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_auth/admin/': {
       id: '/_auth/admin/'
@@ -381,14 +391,30 @@ const GuestRouteRouteWithChildren = GuestRouteRoute._addFileChildren(
   GuestRouteRouteChildren,
 )
 
-const rootRouteChildren: RootRouteChildren = {
-  AuthRouteRoute: AuthRouteRouteWithChildren,
-  GuestRouteRoute: GuestRouteRouteWithChildren,
+interface PublicRouteRouteChildren {
+  PublicKnowledgeRoute: typeof PublicKnowledgeRoute
+  PublicSummariesRoute: typeof PublicSummariesRoute
+  PublicVideosRoute: typeof PublicVideosRoute
+  PublicWorkRoute: typeof PublicWorkRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicKnowledgeRoute: PublicKnowledgeRoute,
   PublicSummariesRoute: PublicSummariesRoute,
   PublicVideosRoute: PublicVideosRoute,
   PublicWorkRoute: PublicWorkRoute,
   PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  GuestRouteRoute: GuestRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
