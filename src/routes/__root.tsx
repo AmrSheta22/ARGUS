@@ -1,22 +1,23 @@
 import { a11yDevtoolsPlugin } from "@tanstack/devtools-a11y/react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import type { QueryClient } from "@tanstack/react-query";
+import { type QueryClient, noop } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import { Toaster } from "#/components/ui/toast.tsx";
+import { authQueryOptions } from "#/lib/auth/queries.ts";
 
 import { TooltipProvider } from "../components/ui/tooltip";
 
 import appCss from "#/styles.css?url";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  // Typically we don't need the user immediately in landing pages.
+  // The public header renders the user menu, so the session is needed on every page.
   // For protected routes, see /_auth/route.tsx
-  // beforeLoad: ({ context }) => {
-  //   void context.queryClient.query(authQueryOptions()).catch(noop);
-  // },
+  beforeLoad: ({ context }) => {
+    void context.queryClient.query(authQueryOptions()).catch(noop);
+  },
   head: () => ({
     meta: [
       {
