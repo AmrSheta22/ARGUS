@@ -11,6 +11,12 @@
 @theme inline {
   --font-heading: "Geist Mono Variable", monospace;
   --font-sans: "Geist Variable", sans-serif;
+  --color-ink: var(--ink);
+  --color-brown: var(--brown);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-line: var(--line);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -52,72 +58,78 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.153 0.006 107.1);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.153 0.006 107.1);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.153 0.006 107.1);
-  --primary: oklch(0.852 0.199 91.936);
-  --primary-foreground: oklch(0.421 0.095 57.708);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.966 0.005 106.5);
-  --muted-foreground: oklch(0.58 0.031 107.3);
-  --accent: oklch(0.966 0.005 106.5);
-  --accent-foreground: oklch(0.228 0.013 107.4);
+  --ink: oklch(0.2278 0.01213 55.7);
+  --brown: oklch(0.3609 0.03245 55.14);
+  --gold: oklch(66.882% 0.13559 81.96);
+  --cream: oklch(0.924 0.03412 80.3);
+  --paper: oklch(0.9606 0.01643 79.35);
+  --line: oklch(0.3609 0.03245 55.14 / 20%);
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--gold);
+  --primary-foreground: var(--ink);
+  --secondary: var(--paper);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper);
+  --muted-foreground: var(--brown);
+  --accent: var(--brown);
+  --accent-foreground: var(--paper);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.93 0.007 106.5);
-  --input: oklch(0.93 0.007 106.5);
-  --ring: oklch(0.737 0.021 106.9);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--brown);
+  --chart-1: var(--gold);
+  --chart-2: var(--brown);
+  --chart-3: var(--ink);
+  --chart-4: oklch(0.5748 0.11562 82.58);
+  --chart-5: oklch(0.5397 0.10912 81.86);
   --radius: 0.625rem;
-  --sidebar: oklch(0.988 0.003 106.5);
-  --sidebar-foreground: oklch(0.153 0.006 107.1);
-  --sidebar-primary: oklch(0.681 0.162 75.834);
-  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
-  --sidebar-accent: oklch(0.966 0.005 106.5);
-  --sidebar-accent-foreground: oklch(0.228 0.013 107.4);
-  --sidebar-border: oklch(0.93 0.007 106.5);
-  --sidebar-ring: oklch(0.737 0.021 106.9);
+  --sidebar: var(--paper);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--cream);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--brown);
 }
 
 /* .dark {
-  --background: oklch(0.153 0.006 107.1);
-  --foreground: oklch(0.988 0.003 106.5);
-  --card: oklch(0.228 0.013 107.4);
-  --card-foreground: oklch(0.988 0.003 106.5);
-  --popover: oklch(0.228 0.013 107.4);
-  --popover-foreground: oklch(0.988 0.003 106.5);
-  --primary: oklch(0.795 0.184 86.047);
-  --primary-foreground: oklch(0.421 0.095 57.708);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.286 0.016 107.4);
-  --muted-foreground: oklch(0.737 0.021 106.9);
-  --accent: oklch(0.286 0.016 107.4);
-  --accent-foreground: oklch(0.988 0.003 106.5);
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: var(--brown);
+  --card-foreground: var(--paper);
+  --popover: var(--brown);
+  --popover-foreground: var(--paper);
+  --primary: var(--gold);
+  --primary-foreground: var(--ink);
+  --secondary: var(--brown);
+  --secondary-foreground: var(--paper);
+  --muted: var(--brown);
+  --muted-foreground: var(--cream);
+  --accent: var(--cream);
+  --accent-foreground: var(--ink);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.58 0.031 107.3);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: oklch(0.228 0.013 107.4);
-  --sidebar-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-primary: oklch(0.795 0.184 86.047);
-  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
-  --sidebar-accent: oklch(0.286 0.016 107.4);
-  --sidebar-accent-foreground: oklch(0.988 0.003 106.5);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.58 0.031 107.3);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--gold);
+  --chart-1: var(--gold);
+  --chart-2: var(--cream);
+  --chart-3: var(--paper);
+  --chart-4: oklch(0.5748 0.11562 82.58);
+  --chart-5: var(--gold);
+  --sidebar: var(--ink);
+  --sidebar-foreground: var(--paper);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--brown);
+  --sidebar-accent-foreground: var(--paper);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--gold);
 } */
 
 @layer base {
@@ -133,5 +145,49 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer components {
+  /* Eye field — clean gap grid: zero overlap by design.
+     Layout (fixed tiles + gap) lives in TSX utilities.
+     This layer only handles the open/closed crossfade + wake state. */
+  .eye-cell {
+    opacity: 0.28;
+    filter: grayscale(0.9) sepia(0.38);
+    transform: none;
+  }
+  .eye-cell img {
+    position: absolute;
+    inset: 10%;
+    width: 80%;
+    height: 80%;
+    max-width: none;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: opacity 0.18s ease;
+  }
+  .eye-cell .eye-open {
+    opacity: 0;
+  }
+  .eye-cell.eye-awake {
+    opacity: 0.55;
+    filter: grayscale(0.3) sepia(0.18);
+  }
+  .eye-cell.eye-awake .eye-open {
+    opacity: 1;
+  }
+  .eye-cell.eye-awake .eye-closed {
+    opacity: 0;
+  }
+  .eye-cell:hover {
+    opacity: 0.52;
+    filter: grayscale(0.35) sepia(0.22);
+  }
+  .eye-cell:hover .eye-open {
+    opacity: 1;
+  }
+  .eye-cell:hover .eye-closed {
+    opacity: 0;
   }
 }
