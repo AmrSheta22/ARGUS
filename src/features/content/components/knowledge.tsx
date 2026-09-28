@@ -14,15 +14,11 @@ export function FeaturedKnowledge({ item }: { item: Knowledge }) {
       <SectionLabel>Featured</SectionLabel>
       <Card className="ring-primary/60">
         <CardHeader className="gap-3">
-          <CardTitle className="max-w-3xl text-2xl leading-snug font-semibold tracking-tight text-balance sm:text-3xl">
-            {item.title}
-          </CardTitle>
+          <CardTitle className="max-w-3xl">{item.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          {item.subtitle ? <p className="text-xs text-muted-foreground">{item.subtitle}</p> : null}
-          <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-            {item.description}
-          </p>
+          {item.subtitle ? <p className="text-muted-foreground">{item.subtitle}</p> : null}
+          <p className="text-muted-foreground">{item.description}</p>
         </CardContent>
         <KnowledgeFooter item={item} tags={tags} />
       </Card>
@@ -36,13 +32,11 @@ export function KnowledgeCard({ item }: { item: Knowledge }) {
   return (
     <Card className="mb-4 break-inside-avoid transition-colors hover:ring-foreground/25">
       <CardHeader className="gap-1.5">
-        <CardTitle className="leading-snug font-semibold tracking-tight text-balance">
-          {item.title}
-        </CardTitle>
+        <CardTitle>{item.title}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        {item.subtitle ? <p className="text-xs text-muted-foreground">{item.subtitle}</p> : null}
-        <p className="leading-relaxed text-muted-foreground">{item.description}</p>
+        {item.subtitle ? <p className="text-muted-foreground">{item.subtitle}</p> : null}
+        <p className="text-muted-foreground">{item.description}</p>
       </CardContent>
       <KnowledgeFooter item={item} tags={tags} linkSize="sm" />
     </Card>

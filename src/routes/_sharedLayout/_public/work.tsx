@@ -4,8 +4,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ContentEmptyState,
   ContentErrorState,
+  ContentGrid,
   ContentPage,
-  SectionLabel,
+  ContentSection,
+  ContentStack,
 } from "#/features/content/components/shared.tsx";
 import { FeaturedWork, WorkCard, WorkSkeletons } from "#/features/content/components/work.tsx";
 import { workQueryOptions } from "#/features/content/queries.ts";
@@ -27,20 +29,19 @@ function WorkPage() {
       ) : data.length === 0 ? (
         <ContentEmptyState message="No research work yet." />
       ) : (
-        <div className="mt-10 flex flex-col gap-10">
+        <ContentStack>
           <FeaturedWork item={data[0]} />
 
           {data.length > 1 ? (
-            <section className="flex flex-col gap-5">
-              <SectionLabel>All publications</SectionLabel>
-              <div className="columns-1 gap-4 md:columns-2">
+            <ContentSection label="All publications">
+              <ContentGrid>
                 {data.slice(1).map((item) => (
                   <WorkCard key={item.id} item={item} />
                 ))}
-              </div>
-            </section>
+              </ContentGrid>
+            </ContentSection>
           ) : null}
-        </div>
+        </ContentStack>
       )}
     </ContentPage>
   );

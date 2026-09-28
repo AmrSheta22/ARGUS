@@ -3,14 +3,12 @@ import { ArrowUpRightIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Button, buttonVariants } from "#/components/ui/button.tsx";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "#/components/ui/empty.tsx";
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center gap-3">
-      <h2 className="font-heading text-[11px] font-medium tracking-[0.25em] text-muted-foreground uppercase">
-        {children}
-      </h2>
-      <span className="h-px flex-1 bg-border" aria-hidden="true" />
+      <h2 className="text-muted-foreground">{children}</h2>
     </div>
   );
 }
@@ -25,32 +23,55 @@ export function ContentPage({
   children: ReactNode;
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col bg-background px-6 py-10">
-      <section className="flex flex-col gap-4">
-        <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h1>
-        <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{description}</p>
+    <div className="typeset mx-auto flex w-full max-w-4xl flex-1 flex-col py-8">
+      <section>
+        <h1 className="text-balance">{title}</h1>
+        <p className="max-w-xl text-pretty text-muted-foreground">{description}</p>
       </section>
       {children}
     </div>
   );
 }
 
+export function ContentStack({ children }: { children: ReactNode }) {
+  return <div className="flex flex-col">{children}</div>;
+}
+
+export function ContentSection({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <section className="flex flex-col gap-5">
+      <SectionLabel>{label}</SectionLabel>
+      {children}
+    </section>
+  );
+}
+
+export function ContentGrid({ children }: { children: ReactNode }) {
+  return <div className="columns-1 gap-2 md:columns-2">{children}</div>;
+}
+
 export function ContentErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="mt-12 flex flex-col items-center gap-3 rounded-none border border-dashed p-10 text-center">
-      <p className="text-sm text-muted-foreground">{message}</p>
-      <Button variant="outline" size="sm" onClick={onRetry}>
-        Retry
-      </Button>
-    </div>
+    <Empty className="not-typeset">
+      <EmptyHeader>
+        <EmptyDescription>{message}</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button variant="outline" size="sm" onClick={onRetry}>
+          Retry
+        </Button>
+      </EmptyContent>
+    </Empty>
   );
 }
 
 export function ContentEmptyState({ message }: { message: string }) {
   return (
-    <div className="mt-12 flex flex-col items-center gap-2 rounded-none border border-dashed p-10 text-center">
-      <p className="text-sm text-muted-foreground">{message}</p>
-    </div>
+    <Empty className="not-typeset">
+      <EmptyHeader>
+        <EmptyDescription>{message}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }
 

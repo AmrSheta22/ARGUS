@@ -15,17 +15,13 @@ export function FeaturedWork({ item }: { item: Work }) {
       <Card className="ring-primary/60">
         <CardHeader className="gap-3">
           <WorkKicker area={item.area} />
-          <CardTitle className="max-w-3xl text-2xl leading-snug font-semibold tracking-tight text-balance sm:text-3xl">
-            {item.title}
-          </CardTitle>
+          <CardTitle className="max-w-3xl">{item.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {item.authors.length > 0 ? (
-            <p className="text-xs text-muted-foreground">{item.authors.join(", ")}</p>
+            <p className="text-muted-foreground">{item.authors.join(", ")}</p>
           ) : null}
-          <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-            {item.abstract}
-          </p>
+          <p className="text-muted-foreground">{item.abstract}</p>
         </CardContent>
         <CardFooter className="flex-wrap justify-between gap-3">
           <WorkMeta item={item} />
@@ -41,15 +37,13 @@ export function WorkCard({ item }: { item: Work }) {
     <Card className="mb-4 break-inside-avoid transition-colors hover:ring-foreground/25">
       <CardHeader className="gap-1.5">
         <WorkKicker area={item.area} />
-        <CardTitle className="leading-snug font-semibold tracking-tight text-balance">
-          {item.title}
-        </CardTitle>
+        <CardTitle>{item.title}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         {item.authors.length > 0 ? (
-          <p className="text-xs text-muted-foreground">{item.authors.join(", ")}</p>
+          <p className="text-muted-foreground">{item.authors.join(", ")}</p>
         ) : null}
-        <p className="leading-relaxed text-muted-foreground">{item.abstract}</p>
+        <p className="text-muted-foreground">{item.abstract}</p>
       </CardContent>
       <CardFooter className="flex-wrap justify-between gap-3">
         <WorkMeta item={item} />
@@ -61,12 +55,7 @@ export function WorkCard({ item }: { item: Work }) {
 
 export function WorkKicker({ area, className }: { area: string; className?: string }) {
   return (
-    <p
-      className={cn(
-        "flex items-center gap-1.5 font-heading text-[10px] font-medium tracking-[0.2em] text-muted-foreground uppercase",
-        className,
-      )}
-    >
+    <p className={cn("flex items-center gap-1.5 text-muted-foreground", className)}>
       <span aria-hidden="true" className="size-1 bg-primary" />
       {area}
     </p>

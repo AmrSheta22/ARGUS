@@ -4,8 +4,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ContentEmptyState,
   ContentErrorState,
+  ContentGrid,
   ContentPage,
-  SectionLabel,
+  ContentSection,
+  ContentStack,
 } from "#/features/content/components/shared.tsx";
 import {
   FeaturedSummary,
@@ -34,20 +36,19 @@ function SummariesPage() {
       ) : data.length === 0 ? (
         <ContentEmptyState message="No summaries yet." />
       ) : (
-        <div className="mt-10 flex flex-col gap-10">
+        <ContentStack>
           <FeaturedSummary item={data[0]} />
 
           {data.length > 1 ? (
-            <section className="flex flex-col gap-5">
-              <SectionLabel>All summaries</SectionLabel>
-              <div className="columns-1 gap-4 md:columns-2">
+            <ContentSection label="All summaries">
+              <ContentGrid>
                 {data.slice(1).map((item) => (
                   <SummaryCard key={item.id} item={item} />
                 ))}
-              </div>
-            </section>
+              </ContentGrid>
+            </ContentSection>
           ) : null}
-        </div>
+        </ContentStack>
       )}
     </ContentPage>
   );
