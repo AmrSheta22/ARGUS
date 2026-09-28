@@ -10,7 +10,7 @@ import {
 import { FeaturedWork, WorkCard, WorkSkeletons } from "#/features/content/components/work.tsx";
 import { workQueryOptions } from "#/features/content/queries.ts";
 
-export const Route = createFileRoute("/work")({
+export const Route = createFileRoute("/_public/work")({
   loader: ({ context }) => context.queryClient.ensureQueryData(workQueryOptions()),
   component: WorkPage,
 });

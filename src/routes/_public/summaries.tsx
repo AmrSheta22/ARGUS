@@ -14,7 +14,7 @@ import {
 } from "#/features/content/components/summaries.tsx";
 import { summaryQueryOptions } from "#/features/content/queries.ts";
 
-export const Route = createFileRoute("/summaries")({
+export const Route = createFileRoute("/_public/summaries")({
   loader: ({ context }) => context.queryClient.ensureQueryData(summaryQueryOptions()),
   component: SummariesPage,
 });

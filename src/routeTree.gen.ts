@@ -9,16 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as GuestRouteRouteImport } from './routes/_guest/route'
-import { Route as KnowledgeRouteImport } from './routes/knowledge'
-import { Route as SummariesRouteImport } from './routes/summaries'
-import { Route as VideosRouteImport } from './routes/videos'
-import { Route as WorkRouteImport } from './routes/work'
 import { Route as AuthAdminRouteRouteImport } from './routes/_auth/admin/route'
 import { Route as GuestLoginRouteImport } from './routes/_guest/login'
 import { Route as GuestSignupRouteImport } from './routes/_guest/signup'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicKnowledgeRouteImport } from './routes/_public/knowledge'
+import { Route as PublicSummariesRouteImport } from './routes/_public/summaries'
+import { Route as PublicVideosRouteImport } from './routes/_public/videos'
+import { Route as PublicWorkRouteImport } from './routes/_public/work'
 import { Route as AuthAdminIndexRouteImport } from './routes/_auth/admin/index'
 import { Route as AuthAdminKnowledgeRouteImport } from './routes/_auth/admin/knowledge'
 import { Route as AuthAdminSummariesRouteImport } from './routes/_auth/admin/summaries'
@@ -26,37 +26,12 @@ import { Route as AuthAdminVideosRouteImport } from './routes/_auth/admin/videos
 import { Route as AuthAdminWorkRouteImport } from './routes/_auth/admin/work'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GuestRouteRoute = GuestRouteRouteImport.update({
   id: '/_guest',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KnowledgeRoute = KnowledgeRouteImport.update({
-  id: '/knowledge',
-  path: '/knowledge',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SummariesRoute = SummariesRouteImport.update({
-  id: '/summaries',
-  path: '/summaries',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VideosRoute = VideosRouteImport.update({
-  id: '/videos',
-  path: '/videos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WorkRoute = WorkRouteImport.update({
-  id: '/work',
-  path: '/work',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAdminRouteRoute = AuthAdminRouteRouteImport.update({
@@ -73,6 +48,31 @@ const GuestSignupRoute = GuestSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => GuestRouteRoute,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/_public/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicKnowledgeRoute = PublicKnowledgeRouteImport.update({
+  id: '/_public/knowledge',
+  path: '/knowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicSummariesRoute = PublicSummariesRouteImport.update({
+  id: '/_public/summaries',
+  path: '/summaries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicVideosRoute = PublicVideosRouteImport.update({
+  id: '/_public/videos',
+  path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicWorkRoute = PublicWorkRouteImport.update({
+  id: '/_public/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
   id: '/',
@@ -106,14 +106,14 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/knowledge': typeof KnowledgeRoute
-  '/summaries': typeof SummariesRoute
-  '/videos': typeof VideosRoute
-  '/work': typeof WorkRoute
+  '/': typeof PublicIndexRoute
   '/admin': typeof AuthAdminRouteRouteWithChildren
   '/login': typeof GuestLoginRoute
   '/signup': typeof GuestSignupRoute
+  '/knowledge': typeof PublicKnowledgeRoute
+  '/summaries': typeof PublicSummariesRoute
+  '/videos': typeof PublicVideosRoute
+  '/work': typeof PublicWorkRoute
   '/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/admin/summaries': typeof AuthAdminSummariesRoute
   '/admin/videos': typeof AuthAdminVideosRoute
@@ -122,13 +122,13 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthAdminIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/knowledge': typeof KnowledgeRoute
-  '/summaries': typeof SummariesRoute
-  '/videos': typeof VideosRoute
-  '/work': typeof WorkRoute
+  '/': typeof PublicIndexRoute
   '/login': typeof GuestLoginRoute
   '/signup': typeof GuestSignupRoute
+  '/knowledge': typeof PublicKnowledgeRoute
+  '/summaries': typeof PublicSummariesRoute
+  '/videos': typeof PublicVideosRoute
+  '/work': typeof PublicWorkRoute
   '/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/admin/summaries': typeof AuthAdminSummariesRoute
   '/admin/videos': typeof AuthAdminVideosRoute
@@ -138,16 +138,16 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_guest': typeof GuestRouteRouteWithChildren
-  '/knowledge': typeof KnowledgeRoute
-  '/summaries': typeof SummariesRoute
-  '/videos': typeof VideosRoute
-  '/work': typeof WorkRoute
   '/_auth/admin': typeof AuthAdminRouteRouteWithChildren
   '/_guest/login': typeof GuestLoginRoute
   '/_guest/signup': typeof GuestSignupRoute
+  '/_public/knowledge': typeof PublicKnowledgeRoute
+  '/_public/summaries': typeof PublicSummariesRoute
+  '/_public/videos': typeof PublicVideosRoute
+  '/_public/work': typeof PublicWorkRoute
+  '/_public/': typeof PublicIndexRoute
   '/_auth/admin/knowledge': typeof AuthAdminKnowledgeRoute
   '/_auth/admin/summaries': typeof AuthAdminSummariesRoute
   '/_auth/admin/videos': typeof AuthAdminVideosRoute
@@ -159,13 +159,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
+    | '/login'
+    | '/signup'
     | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
-    | '/admin'
-    | '/login'
-    | '/signup'
     | '/admin/knowledge'
     | '/admin/summaries'
     | '/admin/videos'
@@ -175,12 +175,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/signup'
     | '/knowledge'
     | '/summaries'
     | '/videos'
     | '/work'
-    | '/login'
-    | '/signup'
     | '/admin/knowledge'
     | '/admin/summaries'
     | '/admin/videos'
@@ -189,16 +189,16 @@ export interface FileRouteTypes {
     | '/admin'
   id:
     | '__root__'
-    | '/'
     | '/_auth'
     | '/_guest'
-    | '/knowledge'
-    | '/summaries'
-    | '/videos'
-    | '/work'
     | '/_auth/admin'
     | '/_guest/login'
     | '/_guest/signup'
+    | '/_public/knowledge'
+    | '/_public/summaries'
+    | '/_public/videos'
+    | '/_public/work'
+    | '/_public/'
     | '/_auth/admin/knowledge'
     | '/_auth/admin/summaries'
     | '/_auth/admin/videos'
@@ -208,25 +208,18 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   GuestRouteRoute: typeof GuestRouteRouteWithChildren
-  KnowledgeRoute: typeof KnowledgeRoute
-  SummariesRoute: typeof SummariesRoute
-  VideosRoute: typeof VideosRoute
-  WorkRoute: typeof WorkRoute
+  PublicKnowledgeRoute: typeof PublicKnowledgeRoute
+  PublicSummariesRoute: typeof PublicSummariesRoute
+  PublicVideosRoute: typeof PublicVideosRoute
+  PublicWorkRoute: typeof PublicWorkRoute
+  PublicIndexRoute: typeof PublicIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -239,34 +232,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof GuestRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/knowledge': {
-      id: '/knowledge'
-      path: '/knowledge'
-      fullPath: '/knowledge'
-      preLoaderRoute: typeof KnowledgeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/summaries': {
-      id: '/summaries'
-      path: '/summaries'
-      fullPath: '/summaries'
-      preLoaderRoute: typeof SummariesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/videos': {
-      id: '/videos'
-      path: '/videos'
-      fullPath: '/videos'
-      preLoaderRoute: typeof VideosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/work': {
-      id: '/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof WorkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/admin': {
@@ -289,6 +254,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/signup'
       preLoaderRoute: typeof GuestSignupRouteImport
       parentRoute: typeof GuestRouteRoute
+    }
+    '/_public/': {
+      id: '/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/knowledge': {
+      id: '/_public/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof PublicKnowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/summaries': {
+      id: '/_public/summaries'
+      path: '/summaries'
+      fullPath: '/summaries'
+      preLoaderRoute: typeof PublicSummariesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/videos': {
+      id: '/_public/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof PublicVideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/work': {
+      id: '/_public/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof PublicWorkRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/admin/': {
       id: '/_auth/admin/'
@@ -382,13 +382,13 @@ const GuestRouteRouteWithChildren = GuestRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   GuestRouteRoute: GuestRouteRouteWithChildren,
-  KnowledgeRoute: KnowledgeRoute,
-  SummariesRoute: SummariesRoute,
-  VideosRoute: VideosRoute,
-  WorkRoute: WorkRoute,
+  PublicKnowledgeRoute: PublicKnowledgeRoute,
+  PublicSummariesRoute: PublicSummariesRoute,
+  PublicVideosRoute: PublicVideosRoute,
+  PublicWorkRoute: PublicWorkRoute,
+  PublicIndexRoute: PublicIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
