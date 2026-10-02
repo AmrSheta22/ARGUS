@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { LoaderCircleIcon } from "lucide-react";
 
@@ -8,8 +7,7 @@ import { Button } from "#/components/ui/button.tsx";
 import { Field, FieldError, FieldGroup, FieldLabel } from "#/components/ui/field.tsx";
 import { Input } from "#/components/ui/input.tsx";
 import { PasswordInput } from "#/components/ui/password-input.tsx";
-import { authClient } from "#/lib/auth/auth-client.ts";
-import { authQueryOptions } from "#/lib/auth/queries.ts";
+import { useSignUp } from "#/lib/auth/hooks.ts";
 import { signUpSchema } from "#/lib/auth/schemas.ts";
 import { getAuthErrorMessage } from "#/lib/auth/utils.ts";
 import { setFieldErrors } from "#/lib/form.ts";
@@ -20,23 +18,9 @@ export const Route = createFileRoute("/_sharedLayout/_guest/signup")({
 
 function SignupForm() {
   const { redirectUrl } = Route.useSearch();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const signUp = useMutation({
-    mutationFn: async (data: { name: string; email: string; password: string }) => {
-      const result = await authClient.signUp.email({
-        ...data,
-        callbackURL: redirectUrl,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message || "An error occurred while signing up.");
-      }
-
-      return result.data;
-    },
-  });
+  const signUp = useSignUp();
 
   const form = useForm({
     defaultValues: {
@@ -54,8 +38,8 @@ function SignupForm() {
           name: value.name,
           email: value.email,
           password: value.password,
+          callbackURL: redirectUrl,
         });
-        queryClient.removeQueries({ queryKey: authQueryOptions().queryKey });
         navigate({ to: redirectUrl });
       } catch (error) {
         setFieldErrors(form, { email: getAuthErrorMessage(error) });

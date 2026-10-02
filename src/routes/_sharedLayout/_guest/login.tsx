@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { LoaderCircleIcon } from "lucide-react";
 
@@ -9,8 +8,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "#/components/ui/field
 import { Input } from "#/components/ui/input.tsx";
 import { PasswordInput } from "#/components/ui/password-input.tsx";
 import { env } from "#/env/client.ts";
-import { authClient } from "#/lib/auth/auth-client.ts";
-import { authQueryOptions } from "#/lib/auth/queries.ts";
+import { useSignIn } from "#/lib/auth/hooks.ts";
 import { loginSchema } from "#/lib/auth/schemas.ts";
 import { getAuthErrorMessage } from "#/lib/auth/utils.ts";
 import { setFormErrors } from "#/lib/form.ts";
@@ -21,22 +19,9 @@ export const Route = createFileRoute("/_sharedLayout/_guest/login")({
 
 function LoginForm() {
   const { redirectUrl } = Route.useSearch();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const emailLogin = useMutation({
-    mutationFn: async (data: { email: string; password: string }) => {
-      const result = await authClient.signIn.email({
-        ...data,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message || "An error occurred while signing in.");
-      }
-
-      return result.data;
-    },
-  });
+  const signIn = useSignIn();
 
   const form = useForm({
     defaultValues: {
@@ -48,11 +33,10 @@ function LoginForm() {
     },
     onSubmit: async ({ value }) => {
       try {
-        await emailLogin.mutateAsync({
+        await signIn.mutateAsync({
           email: value.email,
           password: value.password,
         });
-        queryClient.removeQueries({ queryKey: authQueryOptions().queryKey });
         navigate({ to: redirectUrl });
       } catch (error) {
         setFormErrors(form, getAuthErrorMessage(error));

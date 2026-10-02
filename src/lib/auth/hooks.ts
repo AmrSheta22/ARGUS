@@ -23,6 +23,55 @@ export function useAuthSuspense() {
   return { user };
 }
 
+export function useSignIn() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (data: { email: string; password: string }) => {
+      const result = await authClient.signIn.email({
+        ...data,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message || "An error occurred while signing in.");
+      }
+
+      return result.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: authQueryOptions().queryKey });
+      await router.invalidate();
+    },
+  });
+}
+
+export function useSignUp() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  return useMutation({
+    mutationFn: async (data: {
+      name: string;
+      email: string;
+      password: string;
+      callbackURL?: string;
+    }) => {
+      const result = await authClient.signUp.email({
+        ...data,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message || "An error occurred while signing up.");
+      }
+
+      return result.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: authQueryOptions().queryKey });
+      await router.invalidate();
+    },
+  });
+}
+
 export function useSignOut() {
   const queryClient = useQueryClient();
   const router = useRouter();
