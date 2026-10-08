@@ -51,12 +51,20 @@ export function MobileNav() {
                 <UserMenu onSignOut={() => setOpen(false)} user={session.user} />
               ) : (
                 <>
-                  <Button className="w-full" render={<Link to="/login" />} variant="outline">
-                    Sign In
-                  </Button>
-                  <Button className="w-full" render={<Link to="/signup" />}>
+                  <Link
+                    to="/login"
+                    onClick={() => setOpen(false)}
+                    className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setOpen(false)}
+                    className={cn(buttonVariants(), "w-full")}
+                  >
                     Get Started
-                  </Button>
+                  </Link>
                 </>
               )}
             </div>
