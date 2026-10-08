@@ -4,7 +4,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ContentEmptyState,
   ContentErrorState,
-  ContentGrid,
   ContentPage,
   ContentSection,
   ContentStack,
@@ -37,11 +36,11 @@ function VideosPage() {
 
           {data.length > 1 ? (
             <ContentSection label="All videos">
-              <ContentGrid>
+              <div className="flex flex-col gap-4">
                 {data.slice(1).map((item) => (
                   <VideoCard key={item.id} item={item} />
                 ))}
-              </ContentGrid>
+              </div>
             </ContentSection>
           ) : null}
         </ContentStack>
