@@ -229,7 +229,7 @@ export function SummaryTable({
               ) : (
                 <PaginationItem key={item}>
                   <PaginationLink
-                    href="#"
+                    to="."
                     isActive={item === pageIndex}
                     onClick={(event) => {
                       event.preventDefault();

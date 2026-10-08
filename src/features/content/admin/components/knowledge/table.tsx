@@ -229,7 +229,7 @@ export function KnowledgeTable({
               ) : (
                 <PaginationItem key={item}>
                   <PaginationLink
-                    href="#"
+                    to="."
                     isActive={item === pageIndex}
                     onClick={(event) => {
                       event.preventDefault();

@@ -242,7 +242,7 @@ export function WorkTable({ data, onEdit }: { data: Work[]; onEdit: (work: Work)
               ) : (
                 <PaginationItem key={item}>
                   <PaginationLink
-                    href="#"
+                    to="."
                     isActive={item === pageIndex}
                     onClick={(event) => {
                       event.preventDefault();
