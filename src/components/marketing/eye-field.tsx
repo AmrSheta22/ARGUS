@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const EYE_COUNT = 55;
+const EYE_COUNT = 180;
 
 export function EyeField() {
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -58,7 +58,7 @@ export function EyeField() {
     <div
       aria-hidden="true"
       ref={fieldRef}
-      className="absolute inset-0 z-[1] grid [grid-auto-rows:132px] [grid-template-columns:repeat(auto-fill,minmax(132px,1fr))] content-center justify-center gap-3 overflow-hidden p-[2vw] sm:[grid-auto-rows:156px] sm:[grid-template-columns:repeat(auto-fill,minmax(156px,1fr))] sm:gap-4"
+      className="absolute inset-0 z-[1] grid [grid-auto-rows:84px] [grid-template-columns:repeat(auto-fill,minmax(84px,1fr))] content-center justify-center gap-2 overflow-hidden sm:[grid-auto-rows:104px] sm:[grid-template-columns:repeat(auto-fill,minmax(104px,1fr))] sm:gap-3"
     >
       {Array.from({ length: EYE_COUNT }, (_, index) => (
         <div key={index} className="eye-cell relative min-h-0 min-w-0 overflow-hidden">
